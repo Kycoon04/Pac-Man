@@ -130,7 +130,61 @@
                         <Image url="@../images/Trofeos.png" />
                      </image>
                   </ImageView>
-                  <Button contentDisplay="CENTER" layoutX="468.0" layoutY="477.0" mnemonicParsing="false" onAction="#SummitPlayer" prefHeight="60.0" prefWidth="264.0" text="Aceptar" textAlignment="CENTER">
+                  <Button contentDisplay="CENTER" layoutX="14.0" layoutY="516.0" mnemonicParsing="false" onAction="#SummitPlayer" prefHeight="60.0" prefWidth="264.0" text="Registrar" textAlignment="CENTER">
+                     <graphic>
+                        <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/yellow_button02.png" />
+                           </image>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </ImageView>
+                     </graphic>
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
+                  <Button contentDisplay="CENTER" layoutX="255.0" layoutY="516.0" mnemonicParsing="false" onAction="#LoadPlayer" prefHeight="60.0" prefWidth="264.0" text="Cargar" textAlignment="CENTER">
+                     <graphic>
+                        <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/yellow_button02.png" />
+                           </image>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </ImageView>
+                     </graphic>
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
+                  <Button contentDisplay="CENTER" layoutX="741.0" layoutY="516.0" mnemonicParsing="false" onAction="#Back" prefHeight="60.0" prefWidth="264.0" text="Volver" textAlignment="CENTER">
+                     <graphic>
+                        <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/yellow_button02.png" />
+                           </image>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </ImageView>
+                     </graphic>
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
+                  <Button fx:id="btnDelete" contentDisplay="CENTER" layoutX="502.0" layoutY="516.0" mnemonicParsing="false" onAction="#DeleteInfo" prefHeight="60.0" prefWidth="264.0" text="Eliminar " textAlignment="CENTER">
                      <graphic>
                         <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                            <image>

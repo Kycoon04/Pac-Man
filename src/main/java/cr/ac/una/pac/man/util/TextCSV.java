@@ -23,6 +23,38 @@ public class TextCSV {
     public TextCSV() {
     }
 
+    public User LoadUser(String name, String filePath) {
+        boolean si = true;
+        File file = new File(filePath);
+        List<User> users = new ArrayList<>();
+        if (file.exists() && file.length() > 0) {
+            try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+                String line;
+                StringBuilder sb = new StringBuilder();
+                while ((line = reader.readLine()) != null) {
+                    if (line.startsWith("name:") && sb.length() != 0) {
+                        User existingUser = parseUser(sb.toString());
+                        users.add(existingUser);
+                        sb.setLength(0);
+                    }
+                    sb.append(line).append("\n");
+                }
+                if (sb.length() != 0) {
+                    User existingUser = parseUser(sb.toString());
+                    users.add(existingUser);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            for (User existingUser : users) {
+                if (existingUser.getName().equals(name)) {
+                    return existingUser;
+                }
+            }
+        }
+        return null;
+    }
+
     public void saveUserToFile(User user, String filePath) {
         boolean si = true;
         File file = new File(filePath);
@@ -81,6 +113,9 @@ public class TextCSV {
                     writer.write("Nivel_" + entry.getKey() + "=" + entry.getValue());
                     writer.newLine();
                 }
+                for (int i = 0; i < existingUser.getTrophies().size(); i++) {
+                    writer.write("\ntrophies_" + existingUser.getTrophies().get(i));
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -112,6 +147,8 @@ public class TextCSV {
                     Integer value = Integer.valueOf(part.substring(index + 1));
                     user.getNivel().put(key, value);
                 }
+            } else if (part.startsWith("trophies_") && part.length() > 9) {
+                user.getTrophies().add(part.substring(9));
             }
         }
         return user;

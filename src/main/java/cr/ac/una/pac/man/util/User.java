@@ -4,7 +4,9 @@
  */
 package cr.ac.una.pac.man.util;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -18,6 +20,7 @@ public class User {
     private String Point1Live="";
     private String LivesLose="";
     private HashMap<String,Integer> Nivel;
+    private List<String> trophies = new ArrayList<>();
     private String Ghosteat="";
     private String BestTime="";
     private String Timeallgame="";
@@ -30,11 +33,21 @@ public class User {
         this.PointWin = newUser.getPointWin();
         this.Point1Live = newUser.getPoint1Live();
         this.LivesLose = newUser.getLivesLose();
-        this.Ghosteat = "4";
+        this.Ghosteat = newUser.getGhosteat();
         this.BestTime = newUser.getBestTime();
         this.Timeallgame = newUser.getTimeallgame();
         this.Nivel = newUser.getNivel();
+        this.trophies = newUser.getTrophies();
     }
+
+    public List<String> getTrophies() {
+        return trophies;
+    }
+
+    public void setTrophies(List<String> trophies) {
+        this.trophies = trophies;
+    }
+
     
     public String getName() {
         return name;
@@ -113,7 +126,9 @@ public class User {
         for (Map.Entry<String, Integer> entry : Nivel.entrySet()) {
             sb.append("\nNivel_").append(entry.getKey()).append("=").append(entry.getValue());
         }
-        // No añadir un salto de línea al final del registro
+        for(int i = 0;i<trophies.size();i++){
+        sb.append("\ntrophies_").append(trophies.get(i));
+        }
         return sb.toString();
     }
 }
