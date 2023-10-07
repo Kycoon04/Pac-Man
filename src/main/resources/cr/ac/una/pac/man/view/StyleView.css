@@ -1,0 +1,18 @@
+BorderPane {
+    -fx-background-image: url(../images/Background.jpg);
+    -fx-background-position: center center;
+}
+.button:hover{
+    -fx-background-color: rgba(0, 0, 0, 0.9);
+    -fx-background-radius:10;
+}
+.button{
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-border-width: 2px;
+    -fx-border-radius: 10px;
+}
+TextField {
+    -fx-background-image: url(../images/yellow_button02.png);
+
+}
