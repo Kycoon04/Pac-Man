@@ -29,8 +29,25 @@ public class FlowController {
     private static ResourceBundle idioma;
     private static HashMap<String, FXMLLoader> loaders = new HashMap<>();
     private static Controller controller;
-
+    private static int Difficulty;
+    private static int Nivel=1;
     private FlowController() {
+    }
+
+    public static int getNivel() {
+        return Nivel;
+    }
+
+    public static void setNivel(int Nivel) {
+        FlowController.Nivel = Nivel;
+    }
+
+    public int getDifficulty() {
+        return Difficulty;
+    }
+
+    public static void setDifficulty(int Difficulty) {
+        FlowController.Difficulty = Difficulty;
     }
 
     private static void createInstance() {

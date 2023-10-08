@@ -14,5 +14,8 @@ BorderPane {
 }
 TextField {
     -fx-background-image: url(../images/yellow_button02.png);
-
+}
+.nivel-seleccionado {
+    -fx-background-color: rgba(50, 51, 57, 0.5);
+    -fx-background-radius:10;
 }
