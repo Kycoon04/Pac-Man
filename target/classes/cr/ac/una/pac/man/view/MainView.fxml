@@ -403,7 +403,7 @@
                      <graphic>
                         <ImageView fitHeight="113.0" fitWidth="162.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../images/TheJoker.jpg" />
+                              <Image url="@../images/Nivel1.jpg" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -415,7 +415,7 @@
                      <graphic>
                         <ImageView fitHeight="113.0" fitWidth="162.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../images/LosSimpsons.jpg" />
+                              <Image url="@../images/Nivel2.jpg" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -427,7 +427,7 @@
                      <graphic>
                         <ImageView fitHeight="113.0" fitWidth="162.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../images/IronMan.jpg" />
+                              <Image url="@../images/Nivel3.jpg" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -439,7 +439,7 @@
                      <graphic>
                         <ImageView fitHeight="113.0" fitWidth="162.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../images/SpiderMan.jpg" />
+                              <Image url="@../images/Nivel4.jpg" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -451,7 +451,7 @@
                      <graphic>
                         <ImageView fitHeight="113.0" fitWidth="162.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../images/Batman.jpg" />
+                              <Image url="@../images/Nivel5.jpg" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -463,7 +463,7 @@
                      <graphic>
                         <ImageView fitHeight="113.0" fitWidth="162.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../images/SuperMan.jpg" />
+                              <Image url="@../images/Nivel6.jpg" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -475,7 +475,7 @@
                      <graphic>
                         <ImageView fitHeight="113.0" fitWidth="162.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../images/deadpool.jpg" />
+                              <Image url="@../images/Nivel7.jpg" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -487,7 +487,7 @@
                      <graphic>
                         <ImageView fitHeight="113.0" fitWidth="162.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../images/OnePiece.jpg" />
+                              <Image url="@../images/Nivel8.jpg" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -499,7 +499,7 @@
                      <graphic>
                         <ImageView fitHeight="113.0" fitWidth="162.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../images/Naruto.jpg" />
+                              <Image url="@../images/Nivel9.jpg" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -511,7 +511,7 @@
                      <graphic>
                         <ImageView fitHeight="113.0" fitWidth="162.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../images/DragonBall.jpg" />
+                              <Image url="@../images/Nivel10.jpg" />
                            </image>
                         </ImageView>
                      </graphic>

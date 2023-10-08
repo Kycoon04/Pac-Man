@@ -31,6 +31,7 @@ public class FlowController {
     private static Controller controller;
     private static int Difficulty;
     private static int Nivel=1;
+    static boolean Importar=false;
     private FlowController() {
     }
 
@@ -84,7 +85,7 @@ public class FlowController {
             synchronized (FlowController.class) {
                 if (loader == null) {
                     try {
-                        loader = new FXMLLoader(App.class.getResource("view/" + name + ".fxml"), this.idioma);
+                        loader = new FXMLLoader(App.class.getResource("/cr/ac/una/pac/man/view/" + name + ".fxml"), this.idioma);
                         loader.load();
                         loaders.put(name, loader);
                     } catch (Exception ex) {
@@ -100,10 +101,11 @@ public class FlowController {
         return loader;
     }
 
-    public void goMain() {
+    public void goMain(String MainView) {
         try {
-            this.mainStage.setScene(new Scene(FXMLLoader.load(App.class.getResource("/cr/ac/una/pac/man/view/MainView.fxml"), this.idioma)));
+            this.mainStage.setScene(new Scene(FXMLLoader.load(App.class.getResource("/cr/ac/una/pac/man/view/"+MainView+".fxml"), this.idioma)));
             this.mainStage.show();
+            mainStage.setResizable(false);
         } catch (IOException ex) {
             java.util.logging.Logger.getLogger(FlowController.class.getName()).log(Level.SEVERE, "Error inicializando la vista base.", ex);
         }
@@ -120,7 +122,13 @@ public class FlowController {
     public void goView(String viewName, String accion) {
         goView(viewName, "Center", accion);
     }
+    public static boolean isImportar() {
+        return Importar;
+    }
 
+    public static void setImportar(boolean Importar) {
+        FlowController.Importar = Importar;
+    }
     public void goView(String viewName, String location, String accion) {
         FXMLLoader loader = getLoader(viewName);
         Controller controller = loader.getController();

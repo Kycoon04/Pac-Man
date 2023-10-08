@@ -13,6 +13,6 @@ public class App extends Application {
     public void start(Stage stage) throws IOException {
         FlowController.getInstance().InitializeFlow(stage, null);
         stage.setTitle("Sokoban");
-        FlowController.getInstance().goMain();
+        FlowController.getInstance().goMain("MainView");
     }
 }

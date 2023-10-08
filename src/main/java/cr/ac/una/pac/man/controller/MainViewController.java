@@ -28,7 +28,7 @@ import javafx.stage.Stage;
  *
  * @author jomav
  */
-public class MainViewController implements Initializable {
+public class MainViewController extends Controller implements Initializable {
 
     @FXML
     private BorderPane MainView;
@@ -268,6 +268,13 @@ public class MainViewController implements Initializable {
             default:
                 break;
         }
+        FlowController.setNivel(nivel);
+        FlowController.getInstance().goMain("GameView");
+    }
+
+    @Override
+    public void initialize() {
+       
     }
 
 }
