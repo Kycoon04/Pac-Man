@@ -32,8 +32,45 @@ public class FlowController {
     private static int Difficulty;
     private static int Nivel=1;
     static boolean Importar=false;
+    static String[][] MatrizRespaldo = new String[13][13];
+    static int vidas = 6;
+    static boolean isPause= false;
+    static int Puntos = 0;
     private FlowController() {
     }
+
+    public static int getVidas() {
+        return vidas;
+    }
+
+    public static boolean isIsPause() {
+        return isPause;
+    }
+
+    public static int getPuntos() {
+        return Puntos;
+    }
+
+    public static void setPuntos(int Puntos) {
+        FlowController.Puntos = Puntos;
+    }
+
+    public static void setIsPause(boolean isPause) {
+        FlowController.isPause = isPause;
+    }
+
+    public static void setVidas(int vidas) {
+        FlowController.vidas = vidas;
+    }
+
+    public static String[][] getMatrizRespaldo() {
+        return MatrizRespaldo;
+    }
+
+    public static void setMatrizRespaldo(String[][] MatrizRespaldo) {
+        FlowController.MatrizRespaldo = MatrizRespaldo;
+    }
+
 
     public static int getNivel() {
         return Nivel;
