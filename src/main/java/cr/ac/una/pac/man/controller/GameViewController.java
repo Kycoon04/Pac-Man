@@ -68,12 +68,18 @@ public class GameViewController implements Initializable {
     private int Blinky_Columna = 6;
     private int Pinky_Fila = 6;
     private int Pinky_Columna = 6;
+    private int Inky_Fila = 6;
+    private int Inky_Columna = 5;
+    private int Clyde_Fila = 6;
+    private int Clyde_Columna = 7;
     String[] numeros;
     private String[][] MatrizNumber = new String[13][13];
     private String[][] MatrizRespaldo = new String[13][13];
     private boolean Comenzar = false;
     private boolean isMoving = false;
     private boolean isMovingPinky = false;
+    private boolean isMovingInky = false;
+    private boolean isMovingClyde = false;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -81,7 +87,7 @@ public class GameViewController implements Initializable {
         //Background.setImage(new Image("/cr/ac/una/pac/man/images/Nivel" + FlowController.getNivel() + ".jpg"));
         CargarNivel();
         Platform.runLater(() -> {
-            Node node = Background; // Puedes usar cualquier nodo que esté en la escena
+            Node node = Background;
             Scene scene = node.getScene();
 
             scene.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
@@ -283,11 +289,30 @@ public class GameViewController implements Initializable {
                     break;
             }
             if (!isMoving) {
-                BlinkyMove();
+                BlinkyMove(true);
             }
-            if (!isMovingPinky) {
-                PinkyMove();
-            }
+            PauseTransition delay1 = new PauseTransition(Duration.seconds(0.3));
+            delay1.setOnFinished(e -> {
+                if (!isMovingPinky) {
+                    PinkyMove(true);
+                }
+
+                PauseTransition delay2 = new PauseTransition(Duration.seconds(0.3));
+                delay2.setOnFinished(ev -> {
+                    if (!isMovingInky) {
+                        InkyMove(true);
+                    }
+                    PauseTransition delay3 = new PauseTransition(Duration.seconds(0.3));
+                    delay3.setOnFinished(evt -> {
+                        if (!isMovingClyde) {
+                            ClydeMove(true);
+                        }
+                    });
+                    delay3.play();
+                });
+                delay2.play();
+            });
+            delay1.play();
         }
     }
 
@@ -363,31 +388,71 @@ public class GameViewController implements Initializable {
     @FXML
     private void StartGame(ActionEvent event) {
         Comenzar = true;
+
         if (!isMoving) {
-            BlinkyMove();
+            BlinkyMove(true);
         }
-        if (!isMovingPinky) {
-            PinkyMove();
-        }
+        PauseTransition delay1 = new PauseTransition(Duration.seconds(0.3));
+        delay1.setOnFinished(e -> {
+            if (!isMovingPinky) {
+                PinkyMove(true);
+            }
+
+            PauseTransition delay2 = new PauseTransition(Duration.seconds(0.3));
+            delay2.setOnFinished(ev -> {
+                if (!isMovingInky) {
+                    InkyMove(true);
+                }
+                PauseTransition delay3 = new PauseTransition(Duration.seconds(0.3));
+                delay3.setOnFinished(evt -> {
+                    if (!isMovingClyde) {
+                        ClydeMove(true);
+                    }
+                });
+                delay3.play();
+            });
+            delay2.play();
+        });
+        delay1.play();
     }
 
-    private void BlinkyMove() {
+    private void BlinkyMove(Boolean PrimeraVez) {
         if (!isMoving) {
             isMoving = true;
             Posicion inicio = new Posicion(Blinky_Fila, Blinky_Columna);
             Posicion objetivo = new Posicion(PJ_Fila, PJ_Columna);
-            List<Posicion> ruta = obtenerRutaMasCorta(MatrizNumber, inicio, objetivo);
+            List<Posicion> ruta = obtenerRutaMasCorta(MatrizNumber, inicio, objetivo, PrimeraVez);
             MoverRutaBlinky(ruta);
         }
     }
 
-    private void PinkyMove() {
+    private void PinkyMove(Boolean PrimeraVez) {
         if (!isMovingPinky) {
             isMovingPinky = true;
             Posicion inicio = new Posicion(Pinky_Fila, Pinky_Fila);
             Posicion objetivo = new Posicion(PJ_Fila, PJ_Columna);
-            List<Posicion> ruta = obtenerRutaMasCorta(MatrizNumber, inicio, objetivo);
+            List<Posicion> ruta = obtenerRutaMasCorta(MatrizNumber, inicio, objetivo, PrimeraVez);
             MoverRutaPinky(ruta);
+        }
+    }
+
+    private void InkyMove(Boolean PrimeraVez) {
+        if (!isMovingInky) {
+            isMovingInky = true;
+            Posicion inicio = new Posicion(Inky_Fila, Inky_Columna);
+            Posicion objetivo = new Posicion(PJ_Fila, PJ_Columna);
+            List<Posicion> ruta = obtenerRutaMasCorta(MatrizNumber, inicio, objetivo, PrimeraVez);
+            MoverRutaInky(ruta);
+        }
+    }
+
+    private void ClydeMove(Boolean PrimeraVez) {
+        if (!isMovingClyde) {
+            isMovingClyde = true;
+            Posicion inicio = new Posicion(Clyde_Fila, Clyde_Fila);
+            Posicion objetivo = new Posicion(PJ_Fila, PJ_Columna);
+            List<Posicion> ruta = obtenerRutaMasCorta(MatrizNumber, inicio, objetivo, PrimeraVez);
+            MoverRutaClyde(ruta);
         }
     }
 
@@ -396,47 +461,36 @@ public class GameViewController implements Initializable {
         FlowController.getInstance().goMain("MainView");
     }
 
-    public List<Posicion> obtenerRutaMasCorta(String[][] matriz, Posicion inicio, Posicion objetivo) {
-        //Saray me regaña si no uso algún metodo de busqueda para esto entonces use BFS
+    public List<Posicion> obtenerRutaMasCorta(String[][] matriz, Posicion inicio, Posicion objetivo, Boolean PrimeraVez) {
         int filas = matriz.length;
         int columnas = matriz[0].length;
-
-        String ObstaculoBorde = "4";
         String ObstaculoCaja = "#";
-
         int[] FilasAlrededor = {-1, 0, 1, 0};
         int[] ColumbasAlrededor = {0, 1, 0, -1};
 
-        //Las posiciones visitadas con un nombre muy profesional
         boolean[][] PaseoMiedo = new boolean[filas][columnas];
         Posicion[][] PosicionesAnteriores = new Posicion[filas][columnas];
-        // Cola para el recorrido a lo ancho, basicamente lo principal del una busqueda a lo ancho
         Queue<Posicion> cola = new LinkedList<>();
         cola.offer(inicio);
 
         while (!cola.isEmpty()) {
             Posicion actual = cola.poll();
 
-            // aqui pregunto si llegue
             if (actual.fila == objetivo.fila && actual.columna == objetivo.columna) {
                 return construirRuta(PosicionesAnteriores, inicio, objetivo);
             }
             for (int j = 0; j < 4; j++) {
                 int nuevaFila = actual.fila + FilasAlrededor[j];
                 int nuevaColumna = actual.columna + ColumbasAlrededor[j];
-                // aqui pregunto si me tope con un obstaculo sorry por el if tan grande
                 if (esPosicionValida(nuevaFila, nuevaColumna, filas, columnas) && !PaseoMiedo[nuevaFila][nuevaColumna]
-                        && !matriz[nuevaFila][nuevaColumna].equals(ObstaculoBorde)
                         && !matriz[nuevaFila][nuevaColumna].equals(ObstaculoCaja)) {
-                    // Se agrega la nueva posición a la cola y se actualizan de que si es posible
                     cola.offer(new Posicion(nuevaFila, nuevaColumna));
                     PaseoMiedo[nuevaFila][nuevaColumna] = true;
                     PosicionesAnteriores[nuevaFila][nuevaColumna] = actual;
+
                 }
             }
         }
-
-        // Si no se encontró una ruta, se devuelve una lista vacía
         return new ArrayList<>();
     }
 
@@ -465,7 +519,7 @@ public class GameViewController implements Initializable {
         SequentialTransition seqTransition = new SequentialTransition();
         for (int i = 1; i < ruta.size(); i++) {
             final int index = i;
-            PauseTransition delayAppearance = new PauseTransition(Duration.seconds(0.30)); // Duración de cada paso
+            PauseTransition delayAppearance = new PauseTransition(Duration.seconds(0.30));
 
             delayAppearance.setOnFinished(event -> {
                 ImageView PersonajeMove = new ImageView(new Image("/cr/ac/una/pac/man/images/Blinky.png"));
@@ -511,11 +565,9 @@ public class GameViewController implements Initializable {
         }
 
         seqTransition.setOnFinished(event -> {
-            isMoving = false; // Indica que el movimiento ha finalizado
+            isMoving = false;
         });
-
-        // Inicia la transición secuencial
-        isMoving = true; // Indica que está en movimiento
+        isMoving = true;
         seqTransition.play();
     }
 
@@ -527,7 +579,7 @@ public class GameViewController implements Initializable {
         SequentialTransition seqTransition = new SequentialTransition();
         for (int i = 1; i < ruta.size(); i++) {
             final int index = i;
-            PauseTransition delayAppearance = new PauseTransition(Duration.seconds(0.30)); // Duración de cada paso
+            PauseTransition delayAppearance = new PauseTransition(Duration.seconds(0.30));
 
             delayAppearance.setOnFinished(event -> {
                 ImageView PersonajeMove = new ImageView(new Image("/cr/ac/una/pac/man/images/Pinky.png"));
@@ -572,19 +624,130 @@ public class GameViewController implements Initializable {
             });
             seqTransition.getChildren().add(delayAppearance);
         }
-        for (int i = 0; i < MatrizNumber.length; i++) {             // Iterar a través de las filas
-            for (int j = 0; j < MatrizNumber[i].length; j++) {      // Iterar a través de las columnas
-                System.out.print(MatrizNumber[i][j] + " ");         // Imprimir el elemento actual
-            }
-            System.out.println();                             // Imprimir un salto de línea después de cada fila
-        }
         seqTransition.setOnFinished(event -> {
-            isMovingPinky = false; // Indica que el movimiento ha finalizado
+            isMovingPinky = false;
         });
-
-        // Inicia la transición secuencial
-        isMovingPinky = true; // Indica que está en movimiento
+        isMovingPinky = true;
         seqTransition.play();
     }
 
+    private void MoverRutaInky(List<Posicion> ruta) {
+        final Node[] nodeToRemove = {null};
+        if (!isMovingInky) {
+            return;
+        }
+        SequentialTransition seqTransition = new SequentialTransition();
+        for (int i = 1; i < ruta.size(); i++) {
+            final int index = i;
+            PauseTransition delayAppearance = new PauseTransition(Duration.seconds(0.30));
+
+            delayAppearance.setOnFinished(event -> {
+                ImageView PersonajeMove = new ImageView(new Image("/cr/ac/una/pac/man/images/Inky.png"));
+                PersonajeMove.setFitHeight(50);
+                PersonajeMove.setFitWidth(50);
+                gridGame.add(PersonajeMove, ruta.get(index).columna, ruta.get(index).fila);
+
+                for (Node node : gridGame.getChildren()) {
+                    if (GridPane.getRowIndex(node) != null && GridPane.getRowIndex(node) == Inky_Fila
+                            && GridPane.getColumnIndex(node) != null && GridPane.getColumnIndex(node) == Inky_Columna) {
+                        nodeToRemove[0] = node;
+                        break;
+                    }
+                }
+                if (nodeToRemove[0] != null) {
+                    gridGame.getChildren().remove(nodeToRemove[0]);
+                }
+                if (index == 1) {
+                    MatrizNumber[Inky_Fila][Inky_Columna] = "0";
+                } else {
+                    if (MatrizRespaldo[Inky_Fila][Inky_Columna].equals("2")) {
+                        MatrizNumber[Inky_Fila][Inky_Columna] = "2";
+                    } else {
+                        MatrizNumber[Inky_Fila][Inky_Columna] = "0";
+                    }
+                }
+                MatrizNumber[ruta.get(index).fila][ruta.get(index).columna] = "6";
+                for (Node node : gridGame.getChildren()) {
+                    if (GridPane.getRowIndex(node) != null && GridPane.getRowIndex(node) == Inky_Fila
+                            && GridPane.getColumnIndex(node) != null && GridPane.getColumnIndex(node) == Inky_Columna) {
+                        nodeToRemove[0] = node;
+                        break;
+                    }
+                }
+                if (nodeToRemove[0] != null) {
+                    gridGame.getChildren().remove(nodeToRemove[0]);
+                }
+                restaurar(Inky_Fila, Inky_Columna);
+                Inky_Columna = ruta.get(index).columna;
+                Inky_Fila = ruta.get(index).fila;
+
+            });
+            seqTransition.getChildren().add(delayAppearance);
+        }
+        seqTransition.setOnFinished(event -> {
+            isMovingInky = false;
+        });
+        isMovingInky = true;
+        seqTransition.play();
+    }
+
+    private void MoverRutaClyde(List<Posicion> ruta) {
+        final Node[] nodeToRemove = {null};
+        if (!isMovingClyde) {
+            return;
+        }
+        SequentialTransition seqTransition = new SequentialTransition();
+        for (int i = 1; i < ruta.size(); i++) {
+            final int index = i;
+            PauseTransition delayAppearance = new PauseTransition(Duration.seconds(0.30));
+
+            delayAppearance.setOnFinished(event -> {
+                ImageView PersonajeMove = new ImageView(new Image("/cr/ac/una/pac/man/images/Clyde.png"));
+                PersonajeMove.setFitHeight(50);
+                PersonajeMove.setFitWidth(50);
+                gridGame.add(PersonajeMove, ruta.get(index).columna, ruta.get(index).fila);
+
+                for (Node node : gridGame.getChildren()) {
+                    if (GridPane.getRowIndex(node) != null && GridPane.getRowIndex(node) == Clyde_Fila
+                            && GridPane.getColumnIndex(node) != null && GridPane.getColumnIndex(node) == Clyde_Columna) {
+                        nodeToRemove[0] = node;
+                        break;
+                    }
+                }
+                if (nodeToRemove[0] != null) {
+                    gridGame.getChildren().remove(nodeToRemove[0]);
+                }
+                if (index == 1) {
+                    MatrizNumber[Clyde_Fila][Clyde_Columna] = "0";
+                } else {
+                    if (MatrizRespaldo[Clyde_Fila][Clyde_Columna].equals("2")) {
+                        MatrizNumber[Clyde_Fila][Clyde_Columna] = "2";
+                    } else {
+                        MatrizNumber[Clyde_Fila][Clyde_Columna] = "0";
+                    }
+                }
+                MatrizNumber[ruta.get(index).fila][ruta.get(index).columna] = "5";
+                for (Node node : gridGame.getChildren()) {
+                    if (GridPane.getRowIndex(node) != null && GridPane.getRowIndex(node) == Clyde_Fila
+                            && GridPane.getColumnIndex(node) != null && GridPane.getColumnIndex(node) == Clyde_Columna) {
+                        nodeToRemove[0] = node;
+                        break;
+                    }
+                }
+                if (nodeToRemove[0] != null) {
+                    gridGame.getChildren().remove(nodeToRemove[0]);
+                }
+                restaurar(Clyde_Fila, Clyde_Columna);
+                Clyde_Columna = ruta.get(index).columna;
+                Clyde_Fila = ruta.get(index).fila;
+
+            });
+            seqTransition.getChildren().add(delayAppearance);
+        }
+        seqTransition.setOnFinished(event -> {
+            isMovingClyde = false;
+        });
+        isMovingClyde = true;
+        seqTransition.play();
+    }
 }
