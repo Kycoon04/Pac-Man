@@ -70,30 +70,32 @@ public class GameViewController implements Initializable {
 
     private int PJ_Columna;
     private int PJ_Fila;
-    private int Blinky_Fila = 5;
-    private int Blinky_Columna = 6;
-    private int Pinky_Fila = 6;
-    private int Pinky_Columna = 6;
-    private int Inky_Fila = 6;
-    private int Inky_Columna = 5;
-    private int Clyde_Fila = 6;
-    private int Clyde_Columna = 7;
+    private int Blinky_Fila;
+    private int Blinky_Columna;
+    private int Pinky_Fila;
+    private int Pinky_Columna;
+    private int Inky_Fila;
+    private int Inky_Columna;
+    private int Clyde_Fila;
+    private int Clyde_Columna;
     private boolean Comenzar = false;
     private boolean isMoving = false;
     private boolean isMovingPinky = false;
     private boolean isMovingInky = false;
     private boolean isMovingClyde = false;
     private double velocidadBlinky = 1;
+    static final int WEIGHT_HEIGHT_IMAGE = 25;
+
     String[] numeros;
-    private String[][] MatrizNumber = new String[13][13];
-    private String[][] MatrizRespaldo = new String[13][13];
+    private String[][] MatrizNumber = new String[25][25];
+    private String[][] MatrizRespaldo = new String[25][25];
     @FXML
     private Text TextPerdisteVida;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         TextLevel.setText(Integer.toString(FlowController.getNivel()));
-        //Background.setImage(new Image("/cr/ac/una/pac/man/images/Nivel" + FlowController.getNivel() + ".jpg"));
+        Background.setImage(new Image("/cr/ac/una/pac/man/images/Backgrounds/Nivel" + FlowController.getNivel() + ".jpg"));
         CargarNivel();
         Platform.runLater(() -> {
             Node node = Background;
@@ -181,11 +183,11 @@ public class GameViewController implements Initializable {
         int i = 0;
         ImageView imageView = new ImageView();
         ImageView imageView2;
-        for (int Fila = 0; Fila < 13; Fila++) {
-            for (int columna = 0; columna < 13; columna++) {
+        for (int Fila = 0; Fila < 25; Fila++) {
+            for (int columna = 0; columna < 25; columna++) {
                 switch (matriz[Fila][columna]) {
                     case "#":
-                        if (Fila == 0 && columna != 12) {
+                        if (Fila == 0 && columna != 24) {
                             if (matriz[Fila][columna + 1].equals("#") && matriz[Fila + 1][columna].equals("#") && !esColumnaValida(columna - 1, matriz, Fila)) {
                                 imageView = new ImageView(new Image("/cr/ac/una/pac/man/images/mapa/EsquinaSuperiorIzquierda.png"));
                             } else if (matriz[Fila][columna - 1].equals("#") && matriz[Fila][columna + 1].equals("#") && matriz[Fila + 1][columna].equals("#")) {
@@ -193,9 +195,9 @@ public class GameViewController implements Initializable {
                             } else {
                                 imageView = new ImageView(new Image("/cr/ac/una/pac/man/images/mapa/MuroIntermedioHorizontal.png"));
                             }
-                        } else if (Fila == 0 && columna == 12) {
+                        } else if (Fila == 0 && columna == 24) {
                             imageView = new ImageView(new Image("/cr/ac/una/pac/man/images/mapa/EsquinaSuperiorDerecha.png"));
-                        } else if (Fila == matriz.length - 1 && columna != 12) {
+                        } else if (Fila == matriz.length - 1 && columna != 24) {
                             if (matriz[Fila][columna + 1].equals("#") && matriz[Fila - 1][columna].equals("#") && !esColumnaValida(columna - 1, matriz, Fila)) {
                                 imageView = new ImageView(new Image("/cr/ac/una/pac/man/images/mapa/EsquinaInferiorIzquierda.png"));
                             } else if (matriz[Fila][columna - 1].equals("#") && matriz[Fila][columna + 1].equals("#") && matriz[Fila - 1][columna].equals("#")) {
@@ -203,7 +205,7 @@ public class GameViewController implements Initializable {
                             } else {
                                 imageView = new ImageView(new Image("/cr/ac/una/pac/man/images/mapa/MuroIntermedioHorizontal.png"));
                             }
-                        } else if (Fila == matriz.length - 1 && columna == 12) {
+                        } else if (Fila == matriz.length - 1 && columna == 24) {
                             imageView = new ImageView(new Image("/cr/ac/una/pac/man/images/mapa/EsquinaInferiorDerecha.png"));
                         } else if ((columna == 0 || columna == matriz.length - 1) && (Fila > 0 && Fila < matriz.length - 1)) {
                             if (columna == 0) {
@@ -269,20 +271,31 @@ public class GameViewController implements Initializable {
                             imageView = new ImageView(new Image("/cr/ac/una/pac/man/images/mapa/MuroSolo.png"));
                         }
                         break;
+                    case "1":
+                        imageView = new ImageView(new Image("/cr/ac/una/pac/man/images/BigCoin.png"));
+                        break;
                     case "2":
                         imageView = new ImageView(new Image("/cr/ac/una/pac/man/images/Coin.png"));
                         break;
                     case "4":
-                        imageView = new ImageView(new Image("/cr/ac/una/pac/man/images/Blinky.png"));
+                        imageView = new ImageView(new Image("/cr/ac/una/pac/man/images/Ghosts/Blinky.png"));
+                        Blinky_Fila = Fila;
+                        Blinky_Columna = columna;
                         break;
                     case "5":
-                        imageView = new ImageView(new Image("/cr/ac/una/pac/man/images/Clyde.png"));
+                        imageView = new ImageView(new Image("/cr/ac/una/pac/man/images/Ghosts/Clyde.png"));
+                        Clyde_Fila = Fila;
+                        Clyde_Columna = columna;
                         break;
                     case "6":
-                        imageView = new ImageView(new Image("/cr/ac/una/pac/man/images/Inky.png"));
+                        imageView = new ImageView(new Image("/cr/ac/una/pac/man/images/Ghosts/Inky.png"));
+                        Inky_Fila = Fila;
+                        Inky_Columna = columna;
                         break;
                     case "7":
-                        imageView = new ImageView(new Image("/cr/ac/una/pac/man/images/Pinky.png"));
+                        imageView = new ImageView(new Image("/cr/ac/una/pac/man/images/Ghosts/Pinky.png"));
+                        Pinky_Fila = Fila;
+                        Pinky_Columna = columna;
                         break;
                     case "3":
                         imageView = new ImageView(new Image("/cr/ac/una/pac/man/images/pacmanR.png"));
@@ -290,8 +303,8 @@ public class GameViewController implements Initializable {
                         PJ_Fila = Fila;
                         break;
                 }
-                imageView.setFitHeight(50);
-                imageView.setFitWidth(50);
+                imageView.setFitHeight(25);
+                imageView.setFitWidth(25);
                 gridGame.setColumnIndex(imageView, columna);
                 gridGame.setRowIndex(imageView, Fila);
                 gridGame.add(imageView, columna, Fila);
@@ -304,8 +317,8 @@ public class GameViewController implements Initializable {
     public void MovimientoPersonaje(KeyEvent event) {
         if (Comenzar) {
             ImageView PersonajeMove = new ImageView(new Image("/cr/ac/una/pac/man/images/pacmanR.png"));
-            PersonajeMove.setFitHeight(50);
-            PersonajeMove.setFitWidth(50);
+            PersonajeMove.setFitHeight(WEIGHT_HEIGHT_IMAGE);
+            PersonajeMove.setFitWidth(WEIGHT_HEIGHT_IMAGE);
             switch (event.getCode()) {
                 case UP:
                     PersonajeMove.setImage(new Image("/cr/ac/una/pac/man/images/pacmanU.png"));
@@ -438,20 +451,20 @@ public class GameViewController implements Initializable {
                 imageView = new ImageView(new Image("/cr/ac/una/pac/man/images/Coin.png"));
                 break;
             case "4":
-                imageView = new ImageView(new Image("/cr/ac/una/pac/man/images/Blinky.png"));
+                imageView = new ImageView(new Image("/cr/ac/una/pac/man/images/Ghosts/Blinky.png"));
                 break;
             case "5":
-                imageView = new ImageView(new Image("/cr/ac/una/pac/man/images/Clyde.png"));
+                imageView = new ImageView(new Image("/cr/ac/una/pac/man/images/Ghosts/Clyde.png"));
                 break;
             case "6":
-                imageView = new ImageView(new Image("/cr/ac/una/pac/man/images/Inky.png"));
+                imageView = new ImageView(new Image("/cr/ac/una/pac/man/images/Ghosts/Inky.png"));
                 break;
             case "7":
-                imageView = new ImageView(new Image("/cr/ac/una/pac/man/images/Pinky.png"));
+                imageView = new ImageView(new Image("/cr/ac/una/pac/man/images/Ghosts/Pinky.png"));
                 break;
         }
-        imageView.setFitHeight(50);
-        imageView.setFitWidth(50);
+        imageView.setFitHeight(WEIGHT_HEIGHT_IMAGE);
+        imageView.setFitWidth(WEIGHT_HEIGHT_IMAGE);
         gridGame.setColumnIndex(imageView, columna);
         gridGame.setRowIndex(imageView, fila);
         gridGame.add(imageView, columna, fila);
@@ -472,8 +485,8 @@ public class GameViewController implements Initializable {
         delay1.setOnFinished(e -> {
             if (!isMovingPinky) {
                 Random random = new Random();
-                int fila = random.nextInt(12);
-                int columna = random.nextInt(12);
+                int fila = random.nextInt(24);
+                int columna = random.nextInt(24);
                 PinkyMove(fila, columna);
             }
 
@@ -529,8 +542,8 @@ public class GameViewController implements Initializable {
     private void ClydeMove() {
         if (!isMovingClyde) {
             Random random = new Random();
-            int numero1 = random.nextInt(12);
-            int numero2 = random.nextInt(12);
+            int numero1 = random.nextInt(24);
+            int numero2 = random.nextInt(24);
             isMovingClyde = true;
             Posicion inicio = new Posicion(Clyde_Fila, Clyde_Fila, 0);
             Posicion objetivo = new Posicion(numero1, numero2, 0);
@@ -572,9 +585,9 @@ public class GameViewController implements Initializable {
             PauseTransition delayAppearance = new PauseTransition(Duration.seconds(velocidadBlinky));
 
             delayAppearance.setOnFinished(event -> {
-                ImageView PersonajeMove = new ImageView(new Image("/cr/ac/una/pac/man/images/Blinky.png"));
-                PersonajeMove.setFitHeight(50);
-                PersonajeMove.setFitWidth(50);
+                ImageView PersonajeMove = new ImageView(new Image("/cr/ac/una/pac/man/images/Ghosts/Blinky.png"));
+                PersonajeMove.setFitHeight(WEIGHT_HEIGHT_IMAGE);
+                PersonajeMove.setFitWidth(WEIGHT_HEIGHT_IMAGE);
                 gridGame.add(PersonajeMove, ruta.get(index).columna, ruta.get(index).fila);
                 if (MatrizNumber[ruta.get(index).fila][ruta.get(index).columna].equals("3") && !FlowController.getInstance().isIsPause()) {
                     FlowController.getInstance().setVidas(FlowController.getInstance().getVidas() - 1);
@@ -638,9 +651,9 @@ public class GameViewController implements Initializable {
             PauseTransition delayAppearance = new PauseTransition(Duration.seconds(0.50));
 
             delayAppearance.setOnFinished(event -> {
-                ImageView PersonajeMove = new ImageView(new Image("/cr/ac/una/pac/man/images/Pinky.png"));
-                PersonajeMove.setFitHeight(50);
-                PersonajeMove.setFitWidth(50);
+                ImageView PersonajeMove = new ImageView(new Image("/cr/ac/una/pac/man/images/Ghosts/Pinky.png"));
+                PersonajeMove.setFitHeight(WEIGHT_HEIGHT_IMAGE);
+                PersonajeMove.setFitWidth(WEIGHT_HEIGHT_IMAGE);
                 gridGame.add(PersonajeMove, ruta.get(index).columna, ruta.get(index).fila);
                 if (MatrizNumber[ruta.get(index).fila][ruta.get(index).columna].equals("3") && !FlowController.getInstance().isIsPause()) {
                     FlowController.getInstance().setVidas(FlowController.getInstance().getVidas() - 1);
@@ -704,9 +717,9 @@ public class GameViewController implements Initializable {
             PauseTransition delayAppearance = new PauseTransition(Duration.seconds(1));
 
             delayAppearance.setOnFinished(event -> {
-                ImageView PersonajeMove = new ImageView(new Image("/cr/ac/una/pac/man/images/Inky.png"));
-                PersonajeMove.setFitHeight(50);
-                PersonajeMove.setFitWidth(50);
+                ImageView PersonajeMove = new ImageView(new Image("/cr/ac/una/pac/man/images/Ghosts/Inky.png"));
+                PersonajeMove.setFitHeight(WEIGHT_HEIGHT_IMAGE);
+                PersonajeMove.setFitWidth(WEIGHT_HEIGHT_IMAGE);
                 gridGame.add(PersonajeMove, ruta.get(index).columna, ruta.get(index).fila);
                 if (MatrizNumber[ruta.get(index).fila][ruta.get(index).columna].equals("3") && !FlowController.getInstance().isIsPause()) {
                     FlowController.getInstance().setVidas(FlowController.getInstance().getVidas() - 1);
@@ -770,9 +783,9 @@ public class GameViewController implements Initializable {
             PauseTransition delayAppearance = new PauseTransition(Duration.seconds(0.50));
 
             delayAppearance.setOnFinished(event -> {
-                ImageView PersonajeMove = new ImageView(new Image("/cr/ac/una/pac/man/images/Clyde.png"));
-                PersonajeMove.setFitHeight(50);
-                PersonajeMove.setFitWidth(50);
+                ImageView PersonajeMove = new ImageView(new Image("/cr/ac/una/pac/man/images/Ghosts/Clyde.png"));
+                PersonajeMove.setFitHeight(WEIGHT_HEIGHT_IMAGE);
+                PersonajeMove.setFitWidth(WEIGHT_HEIGHT_IMAGE);
                 gridGame.add(PersonajeMove, ruta.get(index).columna, ruta.get(index).fila);
 
                 if (MatrizNumber[ruta.get(index).fila][ruta.get(index).columna].equals("3") && !FlowController.getInstance().isIsPause()) {
@@ -862,6 +875,14 @@ public class GameViewController implements Initializable {
                 }
             }
         }
+        for (int i = 0; distancias.length < 4; i++) {
+            for (int j = 0; distancias.length < 4; j++) {
+                System.out.println(distancias[i][j] + " ");
+                System.out.println("ds");
+            }
+            System.out.println();
+        }
+        System.out.println("sa");
         return new ArrayList<>();
     }
     //-------------------------------------------------------------------------FIN----------------------------------------------------------------------- 

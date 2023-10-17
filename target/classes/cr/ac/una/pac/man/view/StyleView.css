@@ -1,5 +1,5 @@
 BorderPane {
-    -fx-background-image: url(../images/Background.jpg);
+    -fx-background-image: url(../images/Text&Icons/Background.jpg);
     -fx-background-position: center center;
 }
 .button:hover{
@@ -13,7 +13,7 @@ BorderPane {
     -fx-border-radius: 10px;
 }
 TextField {
-    -fx-background-image: url(../images/yellow_button02.png);
+    -fx-background-image: url(../images/Text&Icons/yellow_button02.png);
 }
 .nivel-seleccionado {
     -fx-background-color: rgba(50, 51, 57, 0.5);

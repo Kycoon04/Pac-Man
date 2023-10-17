@@ -15,263 +15,11 @@
 
 <StackPane stylesheets="@StyleView.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cr.ac.una.pac.man.controller.MainViewController">
    <children>
-      <BorderPane fx:id="MainView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0">
-         <top>
-            <ImageView fitHeight="52.0" fitWidth="508.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
-               <image>
-                  <Image url="@../images/Name.png" />
-               </image>
-               <BorderPane.margin>
-                  <Insets top="50.0" />
-               </BorderPane.margin>
-            </ImageView>
-         </top>
-         <center>
-            <VBox alignment="CENTER" fillWidth="false" prefHeight="200.0" prefWidth="100.0" spacing="30.0" BorderPane.alignment="CENTER">
-               <children>
-                  <Button contentDisplay="CENTER" mnemonicParsing="false" onAction="#Game" prefHeight="60.0" prefWidth="264.0" text="Jugar" textAlignment="CENTER">
-                     <graphic>
-                        <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/yellow_button02.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                     <font>
-                        <Font name="System Bold" size="18.0" />
-                     </font>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </Button>
-                  <Button contentDisplay="CENTER" mnemonicParsing="false" onAction="#Player" prefHeight="60.0" prefWidth="264.0" text="Jugador" textAlignment="CENTER">
-                     <graphic>
-                        <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/yellow_button02.png" />
-                           </image>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                        </ImageView>
-                     </graphic>
-                     <font>
-                        <Font name="System Bold" size="18.0" />
-                     </font>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </Button>
-                  <Button contentDisplay="CENTER" mnemonicParsing="false" onAction="#settings" prefHeight="60.0" prefWidth="264.0" text="Configuración" textAlignment="CENTER">
-                     <graphic>
-                        <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/yellow_button02.png" />
-                           </image>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                        </ImageView>
-                     </graphic>
-                     <font>
-                        <Font name="System Bold" size="18.0" />
-                     </font>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </Button>
-                  <Button contentDisplay="CENTER" mnemonicParsing="false" onAction="#exit" prefHeight="60.0" prefWidth="264.0" text="Salir" textAlignment="CENTER">
-                     <graphic>
-                        <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/yellow_button02.png" />
-                           </image>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                        </ImageView>
-                     </graphic>
-                     <font>
-                        <Font name="System Bold" size="18.0" />
-                     </font>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </Button>
-               </children>
-            </VBox>
-         </center>
-      </BorderPane>
-      <BorderPane fx:id="PlayerView" prefHeight="200.0" prefWidth="200.0">
-         <top>
-            <ImageView fitHeight="52.0" fitWidth="508.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
-               <image>
-                  <Image url="@../images/Name.png" />
-               </image>
-               <BorderPane.margin>
-                  <Insets top="50.0" />
-               </BorderPane.margin>
-            </ImageView>
-         </top>
-         <center>
-            <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-               <children>
-                  <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="500.0" layoutY="61.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../images/NameRegister.png" />
-                     </image>
-                  </ImageView>
-                  <TextField fx:id="NameField" layoutX="504.0" layoutY="111.0" prefHeight="50.0" prefWidth="191.0">
-                     <font>
-                        <Font name="System Bold" size="18.0" />
-                     </font>
-                  </TextField>
-                  <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="500.0" layoutY="299.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../images/Trofeos.png" />
-                     </image>
-                  </ImageView>
-                  <Button contentDisplay="CENTER" layoutX="105.0" layoutY="499.0" mnemonicParsing="false" onAction="#SummitPlayer" prefHeight="60.0" prefWidth="264.0" text="Registrar" textAlignment="CENTER">
-                     <graphic>
-                        <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/yellow_button02.png" />
-                           </image>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                        </ImageView>
-                     </graphic>
-                     <font>
-                        <Font name="System Bold" size="18.0" />
-                     </font>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </Button>
-                  <Button contentDisplay="CENTER" layoutX="346.0" layoutY="499.0" mnemonicParsing="false" onAction="#LoadPlayer" prefHeight="60.0" prefWidth="264.0" text="Cargar" textAlignment="CENTER">
-                     <graphic>
-                        <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/yellow_button02.png" />
-                           </image>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                        </ImageView>
-                     </graphic>
-                     <font>
-                        <Font name="System Bold" size="18.0" />
-                     </font>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </Button>
-                  <Button contentDisplay="CENTER" layoutX="832.0" layoutY="499.0" mnemonicParsing="false" onAction="#Back" prefHeight="60.0" prefWidth="264.0" text="Volver" textAlignment="CENTER">
-                     <graphic>
-                        <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/yellow_button02.png" />
-                           </image>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                        </ImageView>
-                     </graphic>
-                     <font>
-                        <Font name="System Bold" size="18.0" />
-                     </font>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </Button>
-                  <Button fx:id="btnDelete" contentDisplay="CENTER" layoutX="593.0" layoutY="499.0" mnemonicParsing="false" onAction="#DeleteInfo" prefHeight="60.0" prefWidth="264.0" text="Eliminar " textAlignment="CENTER">
-                     <graphic>
-                        <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/yellow_button02.png" />
-                           </image>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                        </ImageView>
-                     </graphic>
-                     <font>
-                        <Font name="System Bold" size="18.0" />
-                     </font>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </Button>
-                  <ImageView fx:id="iconCazador" fitHeight="99.0" fitWidth="96.0" layoutX="237.0" layoutY="345.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../images/Cazador.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fx:id="iconClasico" fitHeight="99.0" fitWidth="96.0" layoutX="365.0" layoutY="345.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../images/Clasico.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fx:id="iconEncierro" fitHeight="99.0" fitWidth="96.0" layoutX="486.0" layoutY="345.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../images/Encierro.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fx:id="iconExperto" fitHeight="99.0" fitWidth="96.0" layoutX="614.0" layoutY="345.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../images/Experto.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fx:id="iconFlash" fitHeight="99.0" fitWidth="96.0" layoutX="739.0" layoutY="345.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../images/Flash.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fx:id="iconRey" fitHeight="99.0" fitWidth="96.0" layoutX="867.0" layoutY="345.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../images/Rey%20del%20Pac-Man.png" />
-                     </image>
-                  </ImageView>
-                  <Text fill="WHITE" layoutX="251.0" layoutY="435.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Cazador">
-                     <font>
-                        <Font name="System Bold" size="18.0" />
-                     </font>
-                  </Text>
-                  <Text fill="WHITE" layoutX="384.0" layoutY="434.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Clasico">
-                     <font>
-                        <Font name="System Bold" size="18.0" />
-                     </font>
-                  </Text>
-                  <Text fill="WHITE" layoutX="499.0" layoutY="434.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Encierro">
-                     <font>
-                        <Font name="System Bold" size="18.0" />
-                     </font>
-                  </Text>
-                  <Text fill="WHITE" layoutX="629.0" layoutY="434.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Experto">
-                     <font>
-                        <Font name="System Bold" size="18.0" />
-                     </font>
-                  </Text>
-                  <Text fill="WHITE" layoutX="766.0" layoutY="433.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Flash">
-                     <font>
-                        <Font name="System Bold" size="18.0" />
-                     </font>
-                  </Text>
-                  <Text fill="WHITE" layoutX="899.0" layoutY="432.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Rey">
-                     <font>
-                        <Font name="System Bold" size="18.0" />
-                     </font>
-                  </Text>
-               </children>
-            </AnchorPane>
-         </center>
-      </BorderPane>
       <BorderPane fx:id="DifficultyView" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0">
          <top>
             <ImageView fitHeight="52.0" fitWidth="508.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
                <image>
-                  <Image url="@../images/Name.png" />
+                  <Image url="@../images/Text&amp;Icons/Name.png" />
                </image>
                <BorderPane.margin>
                   <Insets top="50.0" />
@@ -283,14 +31,14 @@
                <children>
                   <ImageView fitHeight="34.0" fitWidth="263.0" layoutX="469.0" layoutY="68.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/Dificultad.png" />
+                        <Image url="@../images/Text&amp;Icons/Dificultad.png" />
                      </image>
                   </ImageView>
                   <Button fx:id="Facil" contentDisplay="CENTER" layoutX="225.0" layoutY="231.0" mnemonicParsing="false" onAction="#SelectDifficulty" prefHeight="60.0" prefWidth="264.0" text="Facil" textAlignment="CENTER">
                      <graphic>
                         <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../images/yellow_button02.png" />
+                              <Image url="@../images/Text&amp;Icons/yellow_button02.png" />
                            </image>
                            <cursor>
                               <Cursor fx:constant="HAND" />
@@ -308,7 +56,7 @@
                      <graphic>
                         <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../images/yellow_button02.png" />
+                              <Image url="@../images/Text&amp;Icons/yellow_button02.png" />
                            </image>
                            <cursor>
                               <Cursor fx:constant="HAND" />
@@ -326,7 +74,7 @@
                      <graphic>
                         <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../images/yellow_button02.png" />
+                              <Image url="@../images/Text&amp;Icons/yellow_button02.png" />
                            </image>
                            <cursor>
                               <Cursor fx:constant="HAND" />
@@ -344,7 +92,7 @@
                      <graphic>
                         <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../images/yellow_button02.png" />
+                              <Image url="@../images/Text&amp;Icons/yellow_button02.png" />
                            </image>
                            <cursor>
                               <Cursor fx:constant="HAND" />
@@ -366,7 +114,7 @@
          <top>
             <ImageView fitHeight="52.0" fitWidth="508.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
                <image>
-                  <Image url="@../images/Name.png" />
+                  <Image url="@../images/Text&amp;Icons/Name.png" />
                </image>
                <BorderPane.margin>
                   <Insets top="50.0" />
@@ -378,14 +126,14 @@
                <children>
                   <ImageView fitHeight="34.0" fitWidth="263.0" layoutX="479.0" layoutY="67.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/Nivel.png" />
+                        <Image url="@../images/Text&amp;Icons/Nivel.png" />
                      </image>
                   </ImageView>
                   <Button contentDisplay="CENTER" layoutX="469.0" layoutY="505.0" mnemonicParsing="false" onAction="#Back" prefHeight="60.0" prefWidth="264.0" text="Volver" textAlignment="CENTER">
                      <graphic>
                         <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../images/yellow_button02.png" />
+                              <Image url="@../images/Text&amp;Icons/yellow_button02.png" />
                            </image>
                            <cursor>
                               <Cursor fx:constant="HAND" />
@@ -403,7 +151,7 @@
                      <graphic>
                         <ImageView fitHeight="113.0" fitWidth="162.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../images/Nivel1.jpg" />
+                              <Image url="@../images/Backgrounds/Nivel1.jpg" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -415,7 +163,7 @@
                      <graphic>
                         <ImageView fitHeight="113.0" fitWidth="162.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../images/Nivel2.jpg" />
+                              <Image url="@../images/Backgrounds/Nivel2.jpg" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -427,7 +175,7 @@
                      <graphic>
                         <ImageView fitHeight="113.0" fitWidth="162.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../images/Nivel3.jpg" />
+                              <Image url="@../images/Backgrounds/Nivel3.jpg" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -439,7 +187,7 @@
                      <graphic>
                         <ImageView fitHeight="113.0" fitWidth="162.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../images/Nivel4.jpg" />
+                              <Image url="@../images/Backgrounds/Nivel4.jpg" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -451,7 +199,7 @@
                      <graphic>
                         <ImageView fitHeight="113.0" fitWidth="162.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../images/Nivel5.jpg" />
+                              <Image url="@../images/Backgrounds/Nivel5.jpg" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -463,7 +211,7 @@
                      <graphic>
                         <ImageView fitHeight="113.0" fitWidth="162.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../images/Nivel6.jpg" />
+                              <Image url="@../images/Backgrounds/Nivel6.jpg" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -475,7 +223,7 @@
                      <graphic>
                         <ImageView fitHeight="113.0" fitWidth="162.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../images/Nivel7.jpg" />
+                              <Image url="@../images/Backgrounds/Nivel7.jpg" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -487,7 +235,7 @@
                      <graphic>
                         <ImageView fitHeight="113.0" fitWidth="162.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../images/Nivel8.jpg" />
+                              <Image url="@../images/Backgrounds/Nivel8.jpg" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -499,7 +247,7 @@
                      <graphic>
                         <ImageView fitHeight="113.0" fitWidth="162.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../images/Nivel9.jpg" />
+                              <Image url="@../images/Backgrounds/Nivel9.jpg" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -511,7 +259,7 @@
                      <graphic>
                         <ImageView fitHeight="113.0" fitWidth="162.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../images/Nivel10.jpg" />
+                              <Image url="@../images/Backgrounds/Nivel10.jpg" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -571,6 +319,258 @@
                   </Text>
                </children>
             </AnchorPane>
+         </center>
+      </BorderPane>
+      <BorderPane fx:id="PlayerView" prefHeight="200.0" prefWidth="200.0">
+         <top>
+            <ImageView fitHeight="52.0" fitWidth="508.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+               <image>
+                  <Image url="@../images/Text&amp;Icons/Name.png" />
+               </image>
+               <BorderPane.margin>
+                  <Insets top="50.0" />
+               </BorderPane.margin>
+            </ImageView>
+         </top>
+         <center>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <children>
+                  <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="500.0" layoutY="61.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/Text&amp;Icons/NameRegister.png" />
+                     </image>
+                  </ImageView>
+                  <TextField fx:id="NameField" layoutX="504.0" layoutY="111.0" prefHeight="50.0" prefWidth="191.0">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </TextField>
+                  <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="500.0" layoutY="299.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/Text&amp;Icons/Trofeos.png" />
+                     </image>
+                  </ImageView>
+                  <Button contentDisplay="CENTER" layoutX="105.0" layoutY="499.0" mnemonicParsing="false" onAction="#SummitPlayer" prefHeight="60.0" prefWidth="264.0" text="Registrar" textAlignment="CENTER">
+                     <graphic>
+                        <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/Text&amp;Icons/yellow_button02.png" />
+                           </image>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </ImageView>
+                     </graphic>
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
+                  <Button contentDisplay="CENTER" layoutX="346.0" layoutY="499.0" mnemonicParsing="false" onAction="#LoadPlayer" prefHeight="60.0" prefWidth="264.0" text="Cargar" textAlignment="CENTER">
+                     <graphic>
+                        <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/Text&amp;Icons/yellow_button02.png" />
+                           </image>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </ImageView>
+                     </graphic>
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
+                  <Button contentDisplay="CENTER" layoutX="832.0" layoutY="499.0" mnemonicParsing="false" onAction="#Back" prefHeight="60.0" prefWidth="264.0" text="Volver" textAlignment="CENTER">
+                     <graphic>
+                        <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/Text&amp;Icons/yellow_button02.png" />
+                           </image>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </ImageView>
+                     </graphic>
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
+                  <Button fx:id="btnDelete" contentDisplay="CENTER" layoutX="593.0" layoutY="499.0" mnemonicParsing="false" onAction="#DeleteInfo" prefHeight="60.0" prefWidth="264.0" text="Eliminar " textAlignment="CENTER">
+                     <graphic>
+                        <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/Text&amp;Icons/yellow_button02.png" />
+                           </image>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </ImageView>
+                     </graphic>
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
+                  <ImageView fx:id="iconCazador" fitHeight="99.0" fitWidth="96.0" layoutX="237.0" layoutY="345.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/Text&amp;Icons/Cazador.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="iconClasico" fitHeight="99.0" fitWidth="96.0" layoutX="365.0" layoutY="345.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/Text&amp;Icons/Clasico.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="iconEncierro" fitHeight="99.0" fitWidth="96.0" layoutX="486.0" layoutY="345.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/Text&amp;Icons/Encierro.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="iconExperto" fitHeight="99.0" fitWidth="96.0" layoutX="614.0" layoutY="345.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/Text&amp;Icons/Experto.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="iconFlash" fitHeight="99.0" fitWidth="96.0" layoutX="739.0" layoutY="345.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/Text&amp;Icons/Flash.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="iconRey" fitHeight="99.0" fitWidth="96.0" layoutX="867.0" layoutY="345.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/Text&amp;Icons/Rey%20del%20Pac-Man.png" />
+                     </image>
+                  </ImageView>
+                  <Text fill="WHITE" layoutX="251.0" layoutY="435.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Cazador">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Text>
+                  <Text fill="WHITE" layoutX="384.0" layoutY="434.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Clasico">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Text>
+                  <Text fill="WHITE" layoutX="499.0" layoutY="434.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Encierro">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Text>
+                  <Text fill="WHITE" layoutX="629.0" layoutY="434.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Experto">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Text>
+                  <Text fill="WHITE" layoutX="766.0" layoutY="433.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Flash">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Text>
+                  <Text fill="WHITE" layoutX="899.0" layoutY="432.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Rey">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Text>
+               </children>
+            </AnchorPane>
+         </center>
+      </BorderPane>
+      <BorderPane fx:id="MainView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0">
+         <top>
+            <ImageView fitHeight="52.0" fitWidth="508.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+               <image>
+                  <Image url="@../images/Text&amp;Icons/Name.png" />
+               </image>
+               <BorderPane.margin>
+                  <Insets top="50.0" />
+               </BorderPane.margin>
+            </ImageView>
+         </top>
+         <center>
+            <VBox alignment="CENTER" fillWidth="false" prefHeight="200.0" prefWidth="100.0" spacing="30.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Button contentDisplay="CENTER" mnemonicParsing="false" onAction="#Game" prefHeight="60.0" prefWidth="264.0" text="Jugar" textAlignment="CENTER">
+                     <graphic>
+                        <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/Text&amp;Icons/yellow_button02.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
+                  <Button contentDisplay="CENTER" mnemonicParsing="false" onAction="#Player" prefHeight="60.0" prefWidth="264.0" text="Jugador" textAlignment="CENTER">
+                     <graphic>
+                        <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/Text&amp;Icons/yellow_button02.png" />
+                           </image>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </ImageView>
+                     </graphic>
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
+                  <Button contentDisplay="CENTER" mnemonicParsing="false" onAction="#settings" prefHeight="60.0" prefWidth="264.0" text="Configuración" textAlignment="CENTER">
+                     <graphic>
+                        <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/Text&amp;Icons/yellow_button02.png" />
+                           </image>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </ImageView>
+                     </graphic>
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
+                  <Button contentDisplay="CENTER" mnemonicParsing="false" onAction="#exit" prefHeight="60.0" prefWidth="264.0" text="Salir" textAlignment="CENTER">
+                     <graphic>
+                        <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/Text&amp;Icons/yellow_button02.png" />
+                           </image>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </ImageView>
+                     </graphic>
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
+               </children>
+            </VBox>
          </center>
       </BorderPane>
    </children>
