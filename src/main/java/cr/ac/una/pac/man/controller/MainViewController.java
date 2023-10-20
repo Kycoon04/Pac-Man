@@ -58,8 +58,6 @@ public class MainViewController extends Controller implements Initializable {
     private Button Medio;
     @FXML
     private Button Dificil;
-
-    User player;
     @FXML
     private BorderPane LevelView;
     @FXML
@@ -82,13 +80,19 @@ public class MainViewController extends Controller implements Initializable {
     private Button Level9;
     @FXML
     private Button Level10;
+    @FXML
+    private Button btnUpdate;
 
+    User player;
+    
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         ColorAdjust colorAdjust = new ColorAdjust();
         colorAdjust.setBrightness(-0.9);
         MainView.toFront();
         btnDelete.setDisable(true);
+        btnUpdate.setDisable(true);
         iconCazador.setEffect(colorAdjust);
         iconClasico.setEffect(colorAdjust);
         iconEncierro.setEffect(colorAdjust);
@@ -128,7 +132,6 @@ public class MainViewController extends Controller implements Initializable {
 
     @FXML
     private void SummitPlayer(ActionEvent event) throws IOException {
-        MainView.toFront();
         TextCSV text = new TextCSV();
         User user = new User();
         user.setName(NameField.getText());
@@ -137,26 +140,39 @@ public class MainViewController extends Controller implements Initializable {
         user.getTrophies().add("3");
         user.getTrophies().add("4");
         text.saveUserToFile(user, "user.txt");
+        new Mensaje().showModal(Alert.AlertType.INFORMATION, "Aviso", FlowController.getMainStage(), "Se registro correctamente el jugador");
     }
 
     @FXML
     private void LoadPlayer(ActionEvent event) {
+        ColorAdjust colorAdjust = new ColorAdjust();
+        colorAdjust.setBrightness(-0.9);
+        iconCazador.setEffect(colorAdjust);
+        iconClasico.setEffect(colorAdjust);
+        iconEncierro.setEffect(colorAdjust);
+        iconExperto.setEffect(colorAdjust);
+        iconFlash.setEffect(colorAdjust);
+        iconRey.setEffect(colorAdjust);
         TextCSV text = new TextCSV();
         player = text.LoadUser(NameField.getText(), "user.txt");
         if (player == null) {
             new Mensaje().showModal(Alert.AlertType.ERROR, "Error", FlowController.getMainStage(), "Seleccione una jugador correcto");
+            NameField.setText("");
+            btnDelete.setDisable(true);
+            btnUpdate.setDisable(true);
         } else {
             btnDelete.setDisable(false);
+            btnUpdate.setDisable(false);
             new Mensaje().showModal(Alert.AlertType.INFORMATION, "Aviso", FlowController.getMainStage(), "Selecionaste al jugador " + player.getName());
-            SelectTrophies();
+            SelectTrophies(player);
         }
     }
 
-    public void SelectTrophies() {
+    public void SelectTrophies(User user) {
         ColorAdjust colorAdjust = new ColorAdjust();
         colorAdjust.setBrightness(0);
-        for (int i = 0; i < player.getTrophies().size(); i++) {
-            switch (player.getTrophies().get(i)) {
+        for (int i = 0; i < user.getTrophies().size(); i++) {
+            switch (user.getTrophies().get(i)) {
                 case "1":
                     iconCazador.setEffect(colorAdjust);
                     break;
@@ -178,7 +194,6 @@ public class MainViewController extends Controller implements Initializable {
             }
         }
     }
-
     @FXML
     private void Back(ActionEvent event) {
         MainView.toFront();
@@ -212,69 +227,50 @@ public class MainViewController extends Controller implements Initializable {
 
     @FXML
     private void LevelSelect(ActionEvent event) {
-        Button pressedButton = (Button) event.getSource();
-        int nivel = 0;
-        Level1.getStyleClass().remove("nivel-seleccionado");
-        Level2.getStyleClass().remove("nivel-seleccionado");
-        Level3.getStyleClass().remove("nivel-seleccionado");
-        Level4.getStyleClass().remove("nivel-seleccionado");
-        Level5.getStyleClass().remove("nivel-seleccionado");
-        Level6.getStyleClass().remove("nivel-seleccionado");
-        Level7.getStyleClass().remove("nivel-seleccionado");
-        Level8.getStyleClass().remove("nivel-seleccionado");
-        Level9.getStyleClass().remove("nivel-seleccionado");
-        Level10.getStyleClass().remove("nivel-seleccionado");
-        switch (pressedButton.getId()) {
-            case "Level1":
-                nivel = 1;
-                pressedButton.getStyleClass().add("nivel-seleccionado");
-                break;
-            case "Level2":
-                nivel = 2;
-                pressedButton.getStyleClass().add("nivel-seleccionado");
-                break;
-            case "Level3":
-                nivel = 3;
-                pressedButton.getStyleClass().add("nivel-seleccionado");
-                break;
-            case "Level4":
-                nivel = 4;
-                pressedButton.getStyleClass().add("nivel-seleccionado");
-                break;
-            case "Level5":
-                nivel = 5;
-                pressedButton.getStyleClass().add("nivel-seleccionado");
-                break;
-            case "Level6":
-                nivel = 6;
-                pressedButton.getStyleClass().add("nivel-seleccionado");
-                break;
-            case "Level7":
-                nivel = 7;
-                pressedButton.getStyleClass().add("nivel-seleccionado");
-                break;
-            case "Level8":
-                nivel = 8;
-                pressedButton.getStyleClass().add("nivel-seleccionado");
-                break;
-            case "Level9":
-                nivel = 9;
-                pressedButton.getStyleClass().add("nivel-seleccionado");
-                break;
-            case "Level10":
-                nivel = 10;
-                pressedButton.getStyleClass().add("nivel-seleccionado");
-                break;
-            default:
-                break;
-        }
+        String buttonId = ((Button) event.getSource()).getId();
+        int nivel = switch (buttonId) {
+            case "Level1" ->
+                1;
+            case "Level2" ->
+                2;
+            case "Level3" ->
+                3;
+            case "Level4" ->
+                4;
+            case "Level5" ->
+                5;
+            case "Level6" ->
+                6;
+            case "Level7" ->
+                7;
+            case "Level8" ->
+                8;
+            case "Level9" ->
+                9;
+            case "Level10" ->
+                10;
+            default ->
+                0;
+        };
         FlowController.setNivel(nivel);
         FlowController.getInstance().goMain("GameView");
     }
 
     @Override
     public void initialize() {
-       
     }
 
+    @FXML
+    private void Update(ActionEvent event) {
+        TextCSV text = new TextCSV();
+        User user = new User();
+        user.setName(NameField.getText());
+        user.getTrophies().add("1");
+        user.getTrophies().add("2");
+        user.getTrophies().add("3");
+        user.getTrophies().add("4");
+        text.saveUserToFile(user, "user.txt");
+        new Mensaje().showModal(Alert.AlertType.INFORMATION, "Aviso", FlowController.getMainStage(), "Se actualizo correctamente el jugador");
+        SelectTrophies(user);
+    }
 }

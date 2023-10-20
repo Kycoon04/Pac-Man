@@ -12,7 +12,7 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         FlowController.getInstance().InitializeFlow(stage, null);
-        stage.setTitle("Sokoban");
+        stage.setTitle("Pac-Man");
         FlowController.getInstance().goMain("MainView");
     }
 }

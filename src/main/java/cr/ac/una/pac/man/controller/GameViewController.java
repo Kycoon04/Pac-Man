@@ -85,7 +85,8 @@ public class GameViewController implements Initializable {
     private boolean isMovingClyde = false;
     private double velocidadBlinky = 1;
     static final int WEIGHT_HEIGHT_IMAGE = 25;
-
+    private int ValiteMove =0;
+    
     String[] numeros;
     private String[][] MatrizNumber = new String[25][25];
     private String[][] MatrizRespaldo = new String[25][25];
@@ -149,7 +150,6 @@ public class GameViewController implements Initializable {
     }
 
     public void adaptar() {
-
         for (int i = 0; i < MatrizNumber.length; i++) {
             for (int j = 0; j < MatrizNumber.length; j++) {
                 if (FlowController.getInstance().getMatrizRespaldo()[i][j].equals("0") && MatrizNumber[i][j].equals("2")) {
@@ -171,10 +171,6 @@ public class GameViewController implements Initializable {
         }
     }
 
-    private boolean esFilaValida(int fila, String[][] matriz) {
-        return fila >= 0 && fila < matriz.length;
-    }
-
     private boolean esColumnaValida(int columna, String[][] matriz, int fila) {
         return columna >= 0 && columna < matriz[fila].length;
     }
@@ -182,7 +178,6 @@ public class GameViewController implements Initializable {
     public void Pintar(String[][] matriz) {
         int i = 0;
         ImageView imageView = new ImageView();
-        ImageView imageView2;
         for (int Fila = 0; Fila < 25; Fila++) {
             for (int columna = 0; columna < 25; columna++) {
                 switch (matriz[Fila][columna]) {
@@ -316,6 +311,7 @@ public class GameViewController implements Initializable {
 
     public void MovimientoPersonaje(KeyEvent event) {
         if (Comenzar) {
+            ValiteMove++;
             ImageView PersonajeMove = new ImageView(new Image("/cr/ac/una/pac/man/images/pacmanR.png"));
             PersonajeMove.setFitHeight(WEIGHT_HEIGHT_IMAGE);
             PersonajeMove.setFitWidth(WEIGHT_HEIGHT_IMAGE);
@@ -339,6 +335,7 @@ public class GameViewController implements Initializable {
                 default:
                     break;
             }
+            if(ValiteMove%5==0){
             if (!isMoving) {
                 BlinkyMove();
             }
@@ -364,6 +361,7 @@ public class GameViewController implements Initializable {
                 delay2.play();
             });
             delay1.play();
+            }
         }
     }
 
@@ -400,12 +398,10 @@ public class GameViewController implements Initializable {
         Node nodeToRemove = null;
         gridGame.add(PersonajeMove, PJ_Columna + desplazamientoColumna, PJ_Fila + desplazamientoFila);
         if ((MatrizNumber[PJ_Fila + desplazamientoFila][PJ_Columna + desplazamientoColumna].equals("4") || MatrizNumber[PJ_Fila + desplazamientoFila][PJ_Columna + desplazamientoColumna].equals("5")
-                || MatrizNumber[PJ_Fila + desplazamientoFila][PJ_Columna + desplazamientoColumna].equals("6") || MatrizNumber[PJ_Fila + desplazamientoFila][PJ_Columna + desplazamientoColumna].equals("7"))
-                && !FlowController.getInstance().isIsPause()) {
+                || MatrizNumber[PJ_Fila + desplazamientoFila][PJ_Columna + desplazamientoColumna].equals("6") || MatrizNumber[PJ_Fila + desplazamientoFila][PJ_Columna + desplazamientoColumna].equals("7"))) {
             FlowController.getInstance().setVidas(FlowController.getInstance().getVidas() - 1);
             VidasRestantes(FlowController.getInstance().getVidas());
             FlowController.getInstance().setMatrizRespaldo(MatrizRespaldo);
-            FlowController.getInstance().setIsPause(true);
             FlowController.getInstance().goMain("GameView");
         }
         for (Node node : gridGame.getChildren()) {
@@ -487,7 +483,7 @@ public class GameViewController implements Initializable {
                 Random random = new Random();
                 int fila = random.nextInt(24);
                 int columna = random.nextInt(24);
-                PinkyMove(fila, columna);
+                PinkyMove(columna, fila);
             }
 
             PauseTransition delay2 = new PauseTransition(Duration.seconds(1));
@@ -506,7 +502,6 @@ public class GameViewController implements Initializable {
             delay2.play();
         });
         delay1.play();
-        FlowController.getInstance().setIsPause(false);
     }
 
     private void BlinkyMove() {
@@ -522,7 +517,7 @@ public class GameViewController implements Initializable {
     private void PinkyMove(int Fila, int Columna) {
         if (!isMovingPinky) {
             isMovingPinky = true;
-            Posicion inicio = new Posicion(Pinky_Fila, Pinky_Fila, 0);
+            Posicion inicio = new Posicion(Pinky_Fila, Pinky_Columna, 0);
             Posicion objetivo = new Posicion(Fila, Columna, 0);
             List<Posicion> ruta = Dijsktra(MatrizNumber, inicio, objetivo);
             MoverRutaPinky(ruta);
@@ -561,19 +556,9 @@ public class GameViewController implements Initializable {
         return fila >= 0 && fila < filas && columna >= 0 && columna < columnas;
     }
 
-    private List<Posicion> construirRuta(Posicion[][] PosicionRealizada, Posicion inicio, Posicion objetivo) {
-        List<Posicion> ruta = new ArrayList<>();
-        Posicion actual = objetivo;
-        while (actual != null) {
-            ruta.add(0, actual);
-            if (actual.equals(inicio)) {
-                break;
-            }
-            actual = PosicionRealizada[actual.fila][actual.columna];
-        }
-        return ruta;
-    }
-
+    
+//----------------------------------------------------------------------MOVER RUTA----------------------------------------------------------------------   
+    
     private void MoverRutaBlinky(List<Posicion> ruta) {
         final Node[] nodeToRemove = {null};
         if (!isMoving) {
@@ -588,12 +573,12 @@ public class GameViewController implements Initializable {
                 ImageView PersonajeMove = new ImageView(new Image("/cr/ac/una/pac/man/images/Ghosts/Blinky.png"));
                 PersonajeMove.setFitHeight(WEIGHT_HEIGHT_IMAGE);
                 PersonajeMove.setFitWidth(WEIGHT_HEIGHT_IMAGE);
+                
                 gridGame.add(PersonajeMove, ruta.get(index).columna, ruta.get(index).fila);
-                if (MatrizNumber[ruta.get(index).fila][ruta.get(index).columna].equals("3") && !FlowController.getInstance().isIsPause()) {
+                if (MatrizNumber[ruta.get(index).fila][ruta.get(index).columna].equals("3")) {
                     FlowController.getInstance().setVidas(FlowController.getInstance().getVidas() - 1);
                     VidasRestantes(FlowController.getInstance().getVidas());
                     FlowController.getInstance().setMatrizRespaldo(MatrizRespaldo);
-                    FlowController.getInstance().setIsPause(true);
                     FlowController.getInstance().goMain("GameView");
                 }
                 for (Node node : gridGame.getChildren()) {
@@ -655,11 +640,10 @@ public class GameViewController implements Initializable {
                 PersonajeMove.setFitHeight(WEIGHT_HEIGHT_IMAGE);
                 PersonajeMove.setFitWidth(WEIGHT_HEIGHT_IMAGE);
                 gridGame.add(PersonajeMove, ruta.get(index).columna, ruta.get(index).fila);
-                if (MatrizNumber[ruta.get(index).fila][ruta.get(index).columna].equals("3") && !FlowController.getInstance().isIsPause()) {
+                if (MatrizNumber[ruta.get(index).fila][ruta.get(index).columna].equals("3")) {
                     FlowController.getInstance().setVidas(FlowController.getInstance().getVidas() - 1);
                     VidasRestantes(FlowController.getInstance().getVidas());
                     FlowController.getInstance().setMatrizRespaldo(MatrizRespaldo);
-                    FlowController.getInstance().setIsPause(true);
                     FlowController.getInstance().goMain("GameView");
                 }
                 for (Node node : gridGame.getChildren()) {
@@ -721,11 +705,10 @@ public class GameViewController implements Initializable {
                 PersonajeMove.setFitHeight(WEIGHT_HEIGHT_IMAGE);
                 PersonajeMove.setFitWidth(WEIGHT_HEIGHT_IMAGE);
                 gridGame.add(PersonajeMove, ruta.get(index).columna, ruta.get(index).fila);
-                if (MatrizNumber[ruta.get(index).fila][ruta.get(index).columna].equals("3") && !FlowController.getInstance().isIsPause()) {
+                if (MatrizNumber[ruta.get(index).fila][ruta.get(index).columna].equals("3")) {
                     FlowController.getInstance().setVidas(FlowController.getInstance().getVidas() - 1);
                     VidasRestantes(FlowController.getInstance().getVidas());
                     FlowController.getInstance().setMatrizRespaldo(MatrizRespaldo);
-                    FlowController.getInstance().setIsPause(true);
                     FlowController.getInstance().goMain("GameView");
                 }
                 for (Node node : gridGame.getChildren()) {
@@ -788,11 +771,10 @@ public class GameViewController implements Initializable {
                 PersonajeMove.setFitWidth(WEIGHT_HEIGHT_IMAGE);
                 gridGame.add(PersonajeMove, ruta.get(index).columna, ruta.get(index).fila);
 
-                if (MatrizNumber[ruta.get(index).fila][ruta.get(index).columna].equals("3") && !FlowController.getInstance().isIsPause()) {
+                if (MatrizNumber[ruta.get(index).fila][ruta.get(index).columna].equals("3")) {
                     FlowController.getInstance().setVidas(FlowController.getInstance().getVidas() - 1);
                     VidasRestantes(FlowController.getInstance().getVidas());
                     FlowController.getInstance().setMatrizRespaldo(MatrizRespaldo);
-                    FlowController.getInstance().setIsPause(true);
                     FlowController.getInstance().goMain("GameView");
                 }
                 for (Node node : gridGame.getChildren()) {
@@ -875,15 +857,20 @@ public class GameViewController implements Initializable {
                 }
             }
         }
-        for (int i = 0; distancias.length < 4; i++) {
-            for (int j = 0; distancias.length < 4; j++) {
-                System.out.println(distancias[i][j] + " ");
-                System.out.println("ds");
-            }
-            System.out.println();
-        }
-        System.out.println("sa");
         return new ArrayList<>();
+    }
+    
+    private List<Posicion> construirRuta(Posicion[][] PosicionRealizada, Posicion inicio, Posicion objetivo) {
+        List<Posicion> ruta = new ArrayList<>();
+        Posicion actual = objetivo;
+        while (actual != null) {
+            ruta.add(0, actual);
+            if (actual.equals(inicio)) {
+                break;
+            }
+            actual = PosicionRealizada[actual.fila][actual.columna];
+        }
+        return ruta;
     }
     //-------------------------------------------------------------------------FIN----------------------------------------------------------------------- 
 
