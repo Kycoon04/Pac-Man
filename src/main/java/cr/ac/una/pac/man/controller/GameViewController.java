@@ -96,9 +96,12 @@ public class GameViewController implements Initializable {
     private String Clyde = "/cr/ac/una/pac/man/images/Ghosts/Clyde.png";
     private String EatGhost = "/cr/ac/una/pac/man/images/Ghosts/Eat.png";
     private boolean CanEat = false;
-    
-    
-    
+
+    private SequentialTransition seqTransitionBlinky;
+    private SequentialTransition seqTransitionPinky;
+    private SequentialTransition seqTransitionInky;
+    private SequentialTransition seqTransitionClyde;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         TextLevel.setText(Integer.toString(FlowController.getNivel()));
@@ -343,7 +346,7 @@ public class GameViewController implements Initializable {
             }
             if (ValiteMove % 5 == 0) {
                 if (!isMoving) {
-                    BlinkyMove();
+                    BlinkyMove(PJ_Fila, PJ_Columna);
                 }
                 PauseTransition delay1 = new PauseTransition(Duration.seconds(0.6));
                 delay1.setOnFinished(e -> {
@@ -443,12 +446,17 @@ public class GameViewController implements Initializable {
             });
             pause.play();
         }
-       if ((MatrizNumber[PJ_Fila + desplazamientoFila][PJ_Columna + desplazamientoColumna].equals("4") || MatrizNumber[PJ_Fila + desplazamientoFila][PJ_Columna + desplazamientoColumna].equals("5")
-                || MatrizNumber[PJ_Fila + desplazamientoFila][PJ_Columna + desplazamientoColumna].equals("6") || MatrizNumber[PJ_Fila + desplazamientoFila][PJ_Columna + desplazamientoColumna].equals("7"))
-                && CanEat) {
-           
-           
-           
+        if (MatrizNumber[PJ_Fila + desplazamientoFila][PJ_Columna + desplazamientoColumna].equals("4") && CanEat) {
+            cancelBlinky();
+        }
+        if (MatrizNumber[PJ_Fila + desplazamientoFila][PJ_Columna + desplazamientoColumna].equals("7") && CanEat) {
+            cancelPinky();
+        }
+        if (MatrizNumber[PJ_Fila + desplazamientoFila][PJ_Columna + desplazamientoColumna].equals("5") && CanEat) {
+            cancelClyde();
+        }
+        if (MatrizNumber[PJ_Fila + desplazamientoFila][PJ_Columna + desplazamientoColumna].equals("6") && CanEat) {
+            cancelInky();
         }
         MatrizNumber[PJ_Fila + desplazamientoFila][PJ_Columna + desplazamientoColumna] = "3";
         MatrizNumber[PJ_Fila][PJ_Columna] = "0";
@@ -503,7 +511,7 @@ public class GameViewController implements Initializable {
     private void StartGame(ActionEvent event) {
         Comenzar = true;
         if (!isMoving) {
-            BlinkyMove();
+            BlinkyMove(PJ_Fila, PJ_Columna);
         }
         PauseTransition delay1 = new PauseTransition(Duration.seconds(1));
         delay1.setOnFinished(e -> {
@@ -536,11 +544,11 @@ public class GameViewController implements Initializable {
         delay1.play();
     }
 
-    private void BlinkyMove() {
+    private void BlinkyMove(int fila, int columna) {
         if (!isMoving) {
             isMoving = true;
             Posicion inicio = new Posicion(Blinky_Fila, Blinky_Columna, 0);
-            Posicion objetivo = new Posicion(PJ_Fila, PJ_Columna, 0);
+            Posicion objetivo = new Posicion(fila, columna, 0);
             List<Posicion> ruta = Dijsktra(MatrizNumber, inicio, objetivo);
             MoverRutaBlinky(ruta);
         }
@@ -599,7 +607,7 @@ public class GameViewController implements Initializable {
         if (!isMoving) {
             return;
         }
-        SequentialTransition seqTransition = new SequentialTransition();
+        seqTransitionBlinky = new SequentialTransition();
         for (int i = 1; i < ruta.size(); i++) {
             final int index = i;
             PauseTransition delayAppearance = new PauseTransition(Duration.seconds(velocidadBlinky));
@@ -626,6 +634,9 @@ public class GameViewController implements Initializable {
                 if (nodeToRemove[0] != null) {
                     gridGame.getChildren().remove(nodeToRemove[0]);
                 }
+                if (MatrizNumber[ruta.get(index).fila][ruta.get(index).columna].equals("3") && CanEat) {
+                    cancelBlinky();
+                }
                 if (index == 1) {
                     MatrizNumber[Blinky_Fila][Blinky_Columna] = "0";
                 } else {
@@ -650,14 +661,15 @@ public class GameViewController implements Initializable {
                 Blinky_Columna = ruta.get(index).columna;
                 Blinky_Fila = ruta.get(index).fila;
             });
-            seqTransition.getChildren().add(delayAppearance);
+            seqTransitionBlinky.getChildren().add(delayAppearance);
         }
 
-        seqTransition.setOnFinished(event -> {
+        seqTransitionBlinky.setOnFinished(event -> {
             isMoving = false;
         });
         isMoving = true;
-        seqTransition.play();
+        seqTransitionBlinky.play();
+        System.out.println("HOLAAAA");
     }
 
     private void MoverRutaPinky(List<Posicion> ruta) {
@@ -665,7 +677,7 @@ public class GameViewController implements Initializable {
         if (!isMovingPinky) {
             return;
         }
-        SequentialTransition seqTransition = new SequentialTransition();
+        seqTransitionPinky = new SequentialTransition();
         for (int i = 1; i < ruta.size(); i++) {
             final int index = i;
             PauseTransition delayAppearance = new PauseTransition(Duration.seconds(1));
@@ -675,7 +687,7 @@ public class GameViewController implements Initializable {
                 PersonajeMove.setFitHeight(WEIGHT_HEIGHT_IMAGE);
                 PersonajeMove.setFitWidth(WEIGHT_HEIGHT_IMAGE);
                 gridGame.add(PersonajeMove, ruta.get(index).columna, ruta.get(index).fila);
-                if (MatrizNumber[ruta.get(index).fila][ruta.get(index).columna].equals("3")&& !CanEat) {
+                if (MatrizNumber[ruta.get(index).fila][ruta.get(index).columna].equals("3") && !CanEat) {
                     FlowController.getInstance().setVidas(FlowController.getInstance().getVidas() - 1);
                     VidasRestantes(FlowController.getInstance().getVidas());
                     FlowController.getInstance().setMatrizRespaldo(MatrizRespaldo);
@@ -690,6 +702,9 @@ public class GameViewController implements Initializable {
                 }
                 if (nodeToRemove[0] != null) {
                     gridGame.getChildren().remove(nodeToRemove[0]);
+                }
+                if (MatrizNumber[ruta.get(index).fila][ruta.get(index).columna].equals("3") && CanEat) {
+                    cancelPinky();
                 }
                 if (index == 1) {
                     MatrizNumber[Pinky_Fila][Pinky_Columna] = "0";
@@ -716,13 +731,13 @@ public class GameViewController implements Initializable {
                 Pinky_Fila = ruta.get(index).fila;
 
             });
-            seqTransition.getChildren().add(delayAppearance);
+            seqTransitionPinky.getChildren().add(delayAppearance);
         }
-        seqTransition.setOnFinished(event -> {
+        seqTransitionPinky.setOnFinished(event -> {
             isMovingPinky = false;
         });
         isMovingPinky = true;
-        seqTransition.play();
+        seqTransitionPinky.play();
     }
 
     private void MoverRutaInky(List<Posicion> ruta) {
@@ -730,7 +745,7 @@ public class GameViewController implements Initializable {
         if (!isMovingInky) {
             return;
         }
-        SequentialTransition seqTransition = new SequentialTransition();
+        seqTransitionInky = new SequentialTransition();
         for (int i = 1; i < ruta.size(); i++) {
             final int index = i;
             PauseTransition delayAppearance = new PauseTransition(Duration.seconds(1));
@@ -740,7 +755,7 @@ public class GameViewController implements Initializable {
                 PersonajeMove.setFitHeight(WEIGHT_HEIGHT_IMAGE);
                 PersonajeMove.setFitWidth(WEIGHT_HEIGHT_IMAGE);
                 gridGame.add(PersonajeMove, ruta.get(index).columna, ruta.get(index).fila);
-                if (MatrizNumber[ruta.get(index).fila][ruta.get(index).columna].equals("3")&& !CanEat) {
+                if (MatrizNumber[ruta.get(index).fila][ruta.get(index).columna].equals("3") && !CanEat) {
                     FlowController.getInstance().setVidas(FlowController.getInstance().getVidas() - 1);
                     VidasRestantes(FlowController.getInstance().getVidas());
                     FlowController.getInstance().setMatrizRespaldo(MatrizRespaldo);
@@ -755,6 +770,9 @@ public class GameViewController implements Initializable {
                 }
                 if (nodeToRemove[0] != null) {
                     gridGame.getChildren().remove(nodeToRemove[0]);
+                }
+                if (MatrizNumber[ruta.get(index).fila][ruta.get(index).columna].equals("3") && CanEat) {
+                    cancelInky();
                 }
                 if (index == 1) {
                     MatrizNumber[Inky_Fila][Inky_Columna] = "0";
@@ -781,13 +799,13 @@ public class GameViewController implements Initializable {
                 Inky_Fila = ruta.get(index).fila;
 
             });
-            seqTransition.getChildren().add(delayAppearance);
+            seqTransitionInky.getChildren().add(delayAppearance);
         }
-        seqTransition.setOnFinished(event -> {
+        seqTransitionInky.setOnFinished(event -> {
             isMovingInky = false;
         });
         isMovingInky = true;
-        seqTransition.play();
+        seqTransitionInky.play();
     }
 
     private void MoverRutaClyde(List<Posicion> ruta) {
@@ -795,7 +813,7 @@ public class GameViewController implements Initializable {
         if (!isMovingClyde) {
             return;
         }
-        SequentialTransition seqTransition = new SequentialTransition();
+        seqTransitionClyde = new SequentialTransition();
         for (int i = 1; i < ruta.size(); i++) {
             final int index = i;
             PauseTransition delayAppearance = new PauseTransition(Duration.seconds(1));
@@ -806,7 +824,7 @@ public class GameViewController implements Initializable {
                 PersonajeMove.setFitWidth(WEIGHT_HEIGHT_IMAGE);
                 gridGame.add(PersonajeMove, ruta.get(index).columna, ruta.get(index).fila);
 
-                if (MatrizNumber[ruta.get(index).fila][ruta.get(index).columna].equals("3")&& !CanEat) {
+                if (MatrizNumber[ruta.get(index).fila][ruta.get(index).columna].equals("3") && !CanEat) {
                     FlowController.getInstance().setVidas(FlowController.getInstance().getVidas() - 1);
                     VidasRestantes(FlowController.getInstance().getVidas());
                     FlowController.getInstance().setMatrizRespaldo(MatrizRespaldo);
@@ -821,6 +839,9 @@ public class GameViewController implements Initializable {
                 }
                 if (nodeToRemove[0] != null) {
                     gridGame.getChildren().remove(nodeToRemove[0]);
+                }
+                if (MatrizNumber[ruta.get(index).fila][ruta.get(index).columna].equals("3") && CanEat) {
+                    cancelClyde();
                 }
                 if (index == 1) {
                     MatrizNumber[Clyde_Fila][Clyde_Columna] = "0";
@@ -847,13 +868,37 @@ public class GameViewController implements Initializable {
                 Clyde_Fila = ruta.get(index).fila;
 
             });
-            seqTransition.getChildren().add(delayAppearance);
+            seqTransitionClyde.getChildren().add(delayAppearance);
         }
-        seqTransition.setOnFinished(event -> {
+        seqTransitionClyde.setOnFinished(event -> {
             isMovingClyde = false;
         });
         isMovingClyde = true;
-        seqTransition.play();
+        seqTransitionClyde.play();
+    }
+
+    private void cancelBlinky() {
+        if (seqTransitionBlinky != null) {
+            seqTransitionBlinky.stop();
+        }
+    }
+
+    private void cancelClyde() {
+        if (seqTransitionClyde != null) {
+            seqTransitionClyde.stop();
+        }
+    }
+
+    private void cancelInky() {
+        if (seqTransitionInky != null) {
+            seqTransitionInky.stop();
+        }
+    }
+
+    private void cancelPinky() {
+        if (seqTransitionPinky != null) {
+            seqTransitionPinky.stop();
+        }
     }
 
     //----------------------------------------------------------------------DIJSKTRA----------------------------------------------------------------------
