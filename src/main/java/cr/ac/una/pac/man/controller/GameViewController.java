@@ -90,13 +90,13 @@ public class GameViewController implements Initializable {
     private String[] numeros;
     private String[][] MatrizNumber = new String[25][25];
     private String[][] MatrizRespaldo = new String[25][25];
+    private String[][] MatrizGhost = new String[25][25];
     private String Blinky = "/cr/ac/una/pac/man/images/Ghosts/Blinky.png";
     private String Pinky = "/cr/ac/una/pac/man/images/Ghosts/Pinky.png";
     private String Inky = "/cr/ac/una/pac/man/images/Ghosts/Inky.png";
     private String Clyde = "/cr/ac/una/pac/man/images/Ghosts/Clyde.png";
     private String EatGhost = "/cr/ac/una/pac/man/images/Ghosts/Eat.png";
     private boolean CanEat = false;
-
     private SequentialTransition seqTransitionBlinky;
     private SequentialTransition seqTransitionPinky;
     private SequentialTransition seqTransitionInky;
@@ -175,6 +175,7 @@ public class GameViewController implements Initializable {
             for (int j = 0; j < MatrizNumber.length; j++) {
                 MatrizNumber[i][j] = numeros[index];
                 MatrizRespaldo[i][j] = MatrizNumber[i][j];
+                MatrizGhost[i][j] = MatrizNumber[i][j];
                 index++;
             }
         }
@@ -403,6 +404,7 @@ public class GameViewController implements Initializable {
     }
 
     public void Mover(int desplazamientoFila, int desplazamientoColumna, ImageView PersonajeMove) {
+        ImageView ghost;
         Node nodeToRemove = null;
         gridGame.add(PersonajeMove, PJ_Columna + desplazamientoColumna, PJ_Fila + desplazamientoFila);
         if ((MatrizNumber[PJ_Fila + desplazamientoFila][PJ_Columna + desplazamientoColumna].equals("4") || MatrizNumber[PJ_Fila + desplazamientoFila][PJ_Columna + desplazamientoColumna].equals("5")
@@ -439,15 +441,18 @@ public class GameViewController implements Initializable {
             PauseTransition pause = new PauseTransition(Duration.seconds(3));
             pause.setOnFinished(event -> {
                 CanEat = false;
+                if(!isMoving){
                 Blinky = "/cr/ac/una/pac/man/images/Ghosts/Blinky.png";
                 Pinky = "/cr/ac/una/pac/man/images/Ghosts/Pinky.png";
                 Inky = "/cr/ac/una/pac/man/images/Ghosts/Inky.png";
                 Clyde = "/cr/ac/una/pac/man/images/Ghosts/Clyde.png";
+                }
             });
             pause.play();
         }
         if (MatrizNumber[PJ_Fila + desplazamientoFila][PJ_Columna + desplazamientoColumna].equals("4") && CanEat) {
             cancelBlinky();
+            
         }
         if (MatrizNumber[PJ_Fila + desplazamientoFila][PJ_Columna + desplazamientoColumna].equals("7") && CanEat) {
             cancelPinky();
@@ -458,9 +463,41 @@ public class GameViewController implements Initializable {
         if (MatrizNumber[PJ_Fila + desplazamientoFila][PJ_Columna + desplazamientoColumna].equals("6") && CanEat) {
             cancelInky();
         }
+        if (MatrizGhost[PJ_Fila][PJ_Columna].equals("4")) {
+            Blinky = "/cr/ac/una/pac/man/images/Ghosts/Dead.png";
+            ghost = new ImageView(new Image(Blinky));
+            ghost.setFitHeight(WEIGHT_HEIGHT_IMAGE);
+            ghost.setFitWidth(WEIGHT_HEIGHT_IMAGE);
+            MatrizNumber[PJ_Fila][PJ_Columna] = MatrizRespaldo[PJ_Fila][PJ_Columna];
+            gridGame.add(ghost, PJ_Columna, PJ_Fila);
+            Blinky_Fila=PJ_Fila;
+            Blinky_Columna = PJ_Columna;
+            isMoving = false;
+            velocidadBlinky=0.30;
+            BlinkyMove(3,3);
+        } else if (MatrizGhost[PJ_Fila][PJ_Columna].equals("7")) {
+            ghost = new ImageView(new Image(Pinky));
+            ghost.setFitHeight(WEIGHT_HEIGHT_IMAGE);
+            ghost.setFitWidth(WEIGHT_HEIGHT_IMAGE);
+            MatrizNumber[PJ_Fila][PJ_Columna] = MatrizRespaldo[PJ_Fila][PJ_Columna];
+            gridGame.add(ghost, PJ_Columna, PJ_Fila);
+        } else if (MatrizGhost[PJ_Fila][PJ_Columna].equals("5")) {
+            ghost = new ImageView(new Image(Clyde));
+            ghost.setFitHeight(WEIGHT_HEIGHT_IMAGE);
+            ghost.setFitWidth(WEIGHT_HEIGHT_IMAGE);
+            MatrizNumber[PJ_Fila][PJ_Columna] = MatrizRespaldo[PJ_Fila][PJ_Columna];
+            gridGame.add(ghost, PJ_Columna, PJ_Fila);
+        } else if (MatrizGhost[PJ_Fila][PJ_Columna].equals("6")) {
+            ghost = new ImageView(new Image(Inky));
+            ghost.setFitHeight(WEIGHT_HEIGHT_IMAGE);
+            ghost.setFitWidth(WEIGHT_HEIGHT_IMAGE);
+            MatrizNumber[PJ_Fila][PJ_Columna] = MatrizRespaldo[PJ_Fila][PJ_Columna];
+            gridGame.add(ghost, PJ_Columna, PJ_Fila);
+        } else {
+            MatrizNumber[PJ_Fila][PJ_Columna] = "0";
+            MatrizRespaldo[PJ_Fila][PJ_Columna] = "0";
+        }
         MatrizNumber[PJ_Fila + desplazamientoFila][PJ_Columna + desplazamientoColumna] = "3";
-        MatrizNumber[PJ_Fila][PJ_Columna] = "0";
-        MatrizRespaldo[PJ_Fila][PJ_Columna] = "0";
         for (Node node : gridGame.getChildren()) {
             if (GridPane.getRowIndex(node) != null && GridPane.getRowIndex(node) == PJ_Fila
                     && GridPane.getColumnIndex(node) != null && GridPane.getColumnIndex(node) == PJ_Columna) {
@@ -522,7 +559,6 @@ public class GameViewController implements Initializable {
                     Random random = new Random();
                     fila = random.nextInt(24);
                     columna = random.nextInt(24);
-                    System.out.println("hola");
                 }
                 PinkyMove(fila, columna);
             }
@@ -545,6 +581,7 @@ public class GameViewController implements Initializable {
     }
 
     private void BlinkyMove(int fila, int columna) {
+        System.out.println("aaaaa");
         if (!isMoving) {
             isMoving = true;
             Posicion inicio = new Posicion(Blinky_Fila, Blinky_Columna, 0);
@@ -560,7 +597,6 @@ public class GameViewController implements Initializable {
             Posicion inicio = new Posicion(Pinky_Fila, Pinky_Columna, 0);
             Posicion objetivo = new Posicion(Fila, Columna, 0);
             List<Posicion> ruta = Dijsktra(MatrizNumber, inicio, objetivo);
-            System.out.println(ruta);
             MoverRutaPinky(ruta);
         }
     }
@@ -647,6 +683,8 @@ public class GameViewController implements Initializable {
                     }
                 }
                 MatrizNumber[ruta.get(index).fila][ruta.get(index).columna] = "4";
+                MatrizGhost[ruta.get(index).fila][ruta.get(index).columna] = "4";
+                MatrizGhost[Blinky_Fila][Blinky_Columna] = "0";
                 for (Node node : gridGame.getChildren()) {
                     if (GridPane.getRowIndex(node) != null && GridPane.getRowIndex(node) == Blinky_Fila
                             && GridPane.getColumnIndex(node) != null && GridPane.getColumnIndex(node) == Blinky_Columna) {
@@ -669,7 +707,6 @@ public class GameViewController implements Initializable {
         });
         isMoving = true;
         seqTransitionBlinky.play();
-        System.out.println("HOLAAAA");
     }
 
     private void MoverRutaPinky(List<Posicion> ruta) {
@@ -716,6 +753,8 @@ public class GameViewController implements Initializable {
                     }
                 }
                 MatrizNumber[ruta.get(index).fila][ruta.get(index).columna] = "7";
+                MatrizGhost[ruta.get(index).fila][ruta.get(index).columna] = "7";
+                MatrizGhost[Pinky_Fila][Pinky_Columna] = "0";
                 for (Node node : gridGame.getChildren()) {
                     if (GridPane.getRowIndex(node) != null && GridPane.getRowIndex(node) == Pinky_Fila
                             && GridPane.getColumnIndex(node) != null && GridPane.getColumnIndex(node) == Pinky_Columna) {
@@ -784,6 +823,8 @@ public class GameViewController implements Initializable {
                     }
                 }
                 MatrizNumber[ruta.get(index).fila][ruta.get(index).columna] = "6";
+                MatrizGhost[ruta.get(index).fila][ruta.get(index).columna] = "6";
+                MatrizGhost[Inky_Fila][Inky_Columna] = "0";
                 for (Node node : gridGame.getChildren()) {
                     if (GridPane.getRowIndex(node) != null && GridPane.getRowIndex(node) == Inky_Fila
                             && GridPane.getColumnIndex(node) != null && GridPane.getColumnIndex(node) == Inky_Columna) {
@@ -817,7 +858,6 @@ public class GameViewController implements Initializable {
         for (int i = 1; i < ruta.size(); i++) {
             final int index = i;
             PauseTransition delayAppearance = new PauseTransition(Duration.seconds(1));
-
             delayAppearance.setOnFinished(event -> {
                 ImageView PersonajeMove = new ImageView(new Image(Clyde));
                 PersonajeMove.setFitHeight(WEIGHT_HEIGHT_IMAGE);
@@ -853,6 +893,8 @@ public class GameViewController implements Initializable {
                     }
                 }
                 MatrizNumber[ruta.get(index).fila][ruta.get(index).columna] = "5";
+                MatrizGhost[ruta.get(index).fila][ruta.get(index).columna] = "5";
+                MatrizGhost[Clyde_Fila][Clyde_Columna] = "0";
                 for (Node node : gridGame.getChildren()) {
                     if (GridPane.getRowIndex(node) != null && GridPane.getRowIndex(node) == Clyde_Fila
                             && GridPane.getColumnIndex(node) != null && GridPane.getColumnIndex(node) == Clyde_Columna) {
