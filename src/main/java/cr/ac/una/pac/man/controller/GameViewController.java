@@ -360,17 +360,17 @@ public class GameViewController implements Initializable {
                 PauseTransition delay1 = new PauseTransition(Duration.seconds(0.6));
                 delay1.setOnFinished(e -> {
                     if (!isMovingPinky) {
-                        PinkyMove(PJ_Fila, PJ_Columna,false);
+                        PinkyMove(PJ_Fila, PJ_Columna, false);
                     }
                     PauseTransition delay2 = new PauseTransition(Duration.seconds(0.6));
                     delay2.setOnFinished(ev -> {
                         if (!isMovingInky) {
-                            InkyMove(0, 0,false);
+                            InkyMove(0, 0, false);
                         }
                         PauseTransition delay3 = new PauseTransition(Duration.seconds(0.6));
                         delay3.setOnFinished(evt -> {
                             if (!isMovingClyde) {
-                                ClydeMove(0, 0,false);
+                                ClydeMove(0, 0, false);
                             }
                         });
                         delay3.play();
@@ -492,7 +492,7 @@ public class GameViewController implements Initializable {
             Pinky_Columna = PJ_Columna;
             isMovingPinky = false;
             velocidadPinky = 0.30;
-            PinkyMove(10, 12,true);
+            PinkyMove(10, 12, true);
             isMovingPinky = true;
 
         } else if (MatrizGhost[PJ_Fila][PJ_Columna].equals("5")) {
@@ -505,7 +505,7 @@ public class GameViewController implements Initializable {
             Clyde_Columna = PJ_Columna;
             isMovingClyde = false;
             velocidadClyde = 0.30;
-            ClydeMove(10, 13,true);
+            ClydeMove(10, 13, true);
             isMovingClyde = true;
 
         } else if (MatrizGhost[PJ_Fila][PJ_Columna].equals("6")) {
@@ -518,7 +518,7 @@ public class GameViewController implements Initializable {
             Inky_Columna = PJ_Columna;
             isMovingInky = false;
             velocidadInky = 0.30;
-            InkyMove(10, 11,true);
+            InkyMove(10, 11, true);
             isMovingInky = true;
         } else {
             MatrizNumber[PJ_Fila][PJ_Columna] = "0";
@@ -537,6 +537,20 @@ public class GameViewController implements Initializable {
         }
         PJ_Columna += desplazamientoColumna;
         PJ_Fila += desplazamientoFila;
+        if(!Continue()){
+        }
+    }
+
+    public boolean Continue() {
+
+        for (int i = 0; i < MatrizNumber.length; i++) {
+            for (int j = 0; j < MatrizNumber[i].length; j++) {
+                if (MatrizNumber[i][j].equals("2") || MatrizNumber[i][j].equals("1")){
+                return true;
+                }
+            }
+        }
+        return false;
     }
 
     private void restaurar(int fila, int columna) {
@@ -585,17 +599,17 @@ public class GameViewController implements Initializable {
                     fila = random.nextInt(24);
                     columna = random.nextInt(24);
                 }
-                PinkyMove(fila, columna,false);
+                PinkyMove(fila, columna, false);
             }
             PauseTransition delay2 = new PauseTransition(Duration.seconds(1));
             delay2.setOnFinished(ev -> {
                 if (!isMovingInky) {
-                    InkyMove(0, 0,false);
+                    InkyMove(0, 0, false);
                 }
                 PauseTransition delay3 = new PauseTransition(Duration.seconds(1.5));
                 delay3.setOnFinished(evt -> {
                     if (!isMovingClyde) {
-                        ClydeMove(0, 0,false);
+                        ClydeMove(0, 0, false);
                     }
                 });
                 delay3.play();
@@ -621,11 +635,11 @@ public class GameViewController implements Initializable {
             Posicion inicio = new Posicion(Pinky_Fila, Pinky_Columna, 0);
             Posicion objetivo = new Posicion(Fila, Columna, 0);
             List<Posicion> ruta = Dijsktra(MatrizNumber, inicio, objetivo);
-            MoverRutaPinky(ruta,death);
+            MoverRutaPinky(ruta, death);
         }
     }
 
-    private void InkyMove(int Fila, int Columna,boolean death) {
+    private void InkyMove(int Fila, int Columna, boolean death) {
 
         if (Fila == 0 && Columna == 0) {
             Fila = Pinky_Fila;
@@ -637,11 +651,11 @@ public class GameViewController implements Initializable {
             Posicion inicio = new Posicion(Inky_Fila, Inky_Columna, 0);
             Posicion objetivo = new Posicion(Fila, Columna, 0);
             List<Posicion> ruta = BFS(MatrizNumber, inicio, objetivo);
-            MoverRutaInky(ruta,death);
+            MoverRutaInky(ruta, death);
         }
     }
 
-    private void ClydeMove(int Fila, int Columna,boolean death) {
+    private void ClydeMove(int Fila, int Columna, boolean death) {
         if (!isMovingClyde) {
             if (Fila == 0 && Columna == 0) {
                 while (MatrizNumber[Fila][Columna].equals("#")) {
@@ -654,7 +668,7 @@ public class GameViewController implements Initializable {
             Posicion inicio = new Posicion(Clyde_Fila, Clyde_Columna, 0);
             Posicion objetivo = new Posicion(Fila, Columna, 0);
             List<Posicion> ruta = Floyd(MatrizNumber, inicio, objetivo);
-            MoverRutaClyde(ruta,death);
+            MoverRutaClyde(ruta, death);
         }
     }
 
@@ -821,7 +835,7 @@ public class GameViewController implements Initializable {
         seqTransitionPinky.play();
     }
 
-    private void MoverRutaInky(List<Posicion> ruta,boolean death) {
+    private void MoverRutaInky(List<Posicion> ruta, boolean death) {
         final Node[] nodeToRemove = {null};
         if (!isMovingInky) {
             return;
@@ -898,7 +912,7 @@ public class GameViewController implements Initializable {
         seqTransitionInky.play();
     }
 
-    private void MoverRutaClyde(List<Posicion> ruta,boolean death) {
+    private void MoverRutaClyde(List<Posicion> ruta, boolean death) {
         final Node[] nodeToRemove = {null};
         if (!isMovingClyde) {
             return;
