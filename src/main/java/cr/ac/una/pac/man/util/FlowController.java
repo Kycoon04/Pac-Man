@@ -36,11 +36,29 @@ public class FlowController {
     static int vidas = 6;
     static boolean isPause= false;
     static int Puntos = 0;
+    static int PuntosWin = 0;
+    static boolean Win = false;
     private FlowController() {
+    }
+
+    public static boolean isWin() {
+        return Win;
+    }
+
+    public static void setWin(boolean Win) {
+        FlowController.Win = Win;
     }
 
     public static int getVidas() {
         return vidas;
+    }
+
+    public static int getPuntosWin() {
+        return PuntosWin;
+    }
+
+    public static void setPuntosWin(int PuntosWin) {
+        FlowController.PuntosWin = PuntosWin;
     }
 
     public static boolean isIsPause() {

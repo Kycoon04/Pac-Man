@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
- */
 package cr.ac.una.pac.man.controller;
 
 import cr.ac.una.pac.man.util.FlowController;
@@ -10,7 +6,6 @@ import cr.ac.una.pac.man.util.TextCSV;
 import cr.ac.una.pac.man.util.User;
 import java.io.IOException;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -21,7 +16,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
-import javafx.stage.Stage;
+import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
 
 /**
  * FXML Controller class
@@ -82,10 +78,13 @@ public class MainViewController extends Controller implements Initializable {
     private Button Level10;
     @FXML
     private Button btnUpdate;
+    @FXML
+    private Text pointsWin;
 
     User player;
-    
-    
+    @FXML
+    private Pane WinView;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         ColorAdjust colorAdjust = new ColorAdjust();
@@ -100,15 +99,76 @@ public class MainViewController extends Controller implements Initializable {
         iconFlash.setEffect(colorAdjust);
         iconRey.setEffect(colorAdjust);
 
-        Level2.setDisable(true);
-        Level3.setDisable(true);
-        Level4.setDisable(true);
-        Level5.setDisable(true);
-        Level6.setDisable(true);
-        Level7.setDisable(true);
-        Level8.setDisable(true);
-        Level9.setDisable(true);
-        Level10.setDisable(true);
+        switch (FlowController.getNivel()) {
+            case 1:
+                Level2.setDisable(true);
+                Level3.setDisable(true);
+                Level4.setDisable(true);
+                Level5.setDisable(true);
+                Level6.setDisable(true);
+                Level7.setDisable(true);
+                Level8.setDisable(true);
+                Level9.setDisable(true);
+                Level10.setDisable(true);
+                break;
+            case 2:
+                Level3.setDisable(true);
+                Level4.setDisable(true);
+                Level5.setDisable(true);
+                Level6.setDisable(true);
+                Level7.setDisable(true);
+                Level8.setDisable(true);
+                Level9.setDisable(true);
+                Level10.setDisable(true);
+                break;
+            case 3:
+                Level4.setDisable(true);
+                Level5.setDisable(true);
+                Level6.setDisable(true);
+                Level7.setDisable(true);
+                Level8.setDisable(true);
+                Level9.setDisable(true);
+                Level10.setDisable(true);
+                break;
+            case 4:
+                Level5.setDisable(true);
+                Level6.setDisable(true);
+                Level7.setDisable(true);
+                Level8.setDisable(true);
+                Level9.setDisable(true);
+                Level10.setDisable(true);
+                break;
+            case 5:
+                Level6.setDisable(true);
+                Level7.setDisable(true);
+                Level8.setDisable(true);
+                Level9.setDisable(true);
+                Level10.setDisable(true);
+                break;
+            case 6:
+                Level7.setDisable(true);
+                Level8.setDisable(true);
+                Level9.setDisable(true);
+                Level10.setDisable(true);
+                break;
+            case 7:
+                Level8.setDisable(true);
+                Level9.setDisable(true);
+                Level10.setDisable(true);
+                break;
+            case 8:
+                Level9.setDisable(true);
+                Level10.setDisable(true);
+                break;
+            case 9:
+                Level10.setDisable(true);
+                break;
+        }
+        if (FlowController.isWin()) {
+            FlowController.setWin(false);
+            pointsWin.setText(Integer.toString(FlowController.getPuntosWin()));
+            WinView.toFront();
+        }
     }
 
     @FXML
@@ -194,6 +254,7 @@ public class MainViewController extends Controller implements Initializable {
             }
         }
     }
+
     @FXML
     private void Back(ActionEvent event) {
         MainView.toFront();
@@ -272,5 +333,10 @@ public class MainViewController extends Controller implements Initializable {
         text.saveUserToFile(user, "user.txt");
         new Mensaje().showModal(Alert.AlertType.INFORMATION, "Aviso", FlowController.getMainStage(), "Se actualizo correctamente el jugador");
         SelectTrophies(user);
+    }
+
+    @FXML
+    private void CloseWin(ActionEvent event) {
+        MainView.toFront();
     }
 }

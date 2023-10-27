@@ -8,6 +8,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -591,5 +592,47 @@
             </AnchorPane>
          </center>
       </BorderPane>
+      <Pane fx:id="WinView" maxHeight="400.0" maxWidth="600.0" minHeight="400.0" minWidth="600.0" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: white; -fx-background-radius: 30px;">
+         <children>
+            <Button contentDisplay="CENTER" layoutX="168.0" layoutY="318.0" mnemonicParsing="false" onAction="#CloseWin" prefHeight="60.0" prefWidth="264.0" text="Cerrar" textAlignment="CENTER">
+               <graphic>
+                  <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/Text&amp;Icons/yellow_button02.png" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </ImageView>
+               </graphic>
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            <Text layoutX="192.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" text="¡Nivel completado!">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+            </Text>
+            <Text layoutX="248.0" layoutY="116.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ganaste: ">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+            </Text>
+            <Text fx:id="pointsWin" layoutX="293.0" layoutY="148.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" ">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+            </Text>
+            <Text layoutX="190.0" layoutY="183.0" strokeType="OUTSIDE" strokeWidth="0.0" text="por pasar este nivel!">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+            </Text>
+         </children>
+      </Pane>
    </children>
 </StackPane>
