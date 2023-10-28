@@ -9,16 +9,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.PriorityQueue;
-import java.util.Queue;
 import java.util.Random;
 import java.util.ResourceBundle;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.LogRecord;
 import javafx.animation.PauseTransition;
 import javafx.animation.SequentialTransition;
 import javafx.application.Platform;
@@ -104,7 +101,12 @@ public class GameViewController implements Initializable {
     private SequentialTransition seqTransitionPinky;
     private SequentialTransition seqTransitionInky;
     private SequentialTransition seqTransitionClyde;
-
+    private boolean consecutivo = false;
+    private Algoritmos algoritmos = new Algoritmos();
+    private int coinstotal = 0;
+    private int coinseat = 0;
+    private boolean withoutdead = true;
+    private boolean pausa = false;
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         TextLevel.setText(Integer.toString(FlowController.getNivel()));
@@ -291,6 +293,8 @@ public class GameViewController implements Initializable {
                         break;
                     case "2":
                         imageView = new ImageView(new Image("/cr/ac/una/pac/man/images/Coin.png"));
+                        coinstotal++;
+                        coinseat++;
                         break;
                     case "4":
                         imageView = new ImageView(new Image(Blinky));
@@ -354,12 +358,12 @@ public class GameViewController implements Initializable {
                     break;
             }
             if (ValiteMove % 5 == 0) {
-                if (!isMoving) {
+                if (!isMoving && !pausa) {
                     BlinkyMove(PJ_Fila, PJ_Columna, false);
                 }
                 PauseTransition delay1 = new PauseTransition(Duration.seconds(0.6));
                 delay1.setOnFinished(e -> {
-                    if (!isMovingPinky) {
+                    if (!isMovingPinky && !pausa) {
                         PinkyMove(PJ_Fila, PJ_Columna, false);
                     }
                     PauseTransition delay2 = new PauseTransition(Duration.seconds(0.6));
@@ -411,6 +415,17 @@ public class GameViewController implements Initializable {
         }
     }
 
+    private void iniciarContadorDe30Segundos() {
+    ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+
+        pausa = true;
+
+    executor.schedule(() -> {
+        pausa = false;
+        executor.shutdown();
+    }, 30, TimeUnit.SECONDS);
+}
+    
     public void Mover(int desplazamientoFila, int desplazamientoColumna, ImageView PersonajeMove) {
         int AuxFila = 0;
         int AuxColum = 0;
@@ -422,8 +437,6 @@ public class GameViewController implements Initializable {
             for (int i = 0; i < MatrizNumber.length; i++) {
                 for (int j = 0; j < MatrizNumber.length; j++) {
                     if (MatrizNumber[i][j].equals("@")) {
-                        System.out.println(PJ_Fila + desplazamientoFila+","+(PJ_Columna + desplazamientoColumna));
-                        System.out.println(i+","+j);
                         gridGame.add(PersonajeMove, j, i);
                         AuxFila = i;
                         AuxColum = j;
@@ -440,11 +453,13 @@ public class GameViewController implements Initializable {
         if ((MatrizNumber[PJ_Fila + desplazamientoFila][PJ_Columna + desplazamientoColumna].equals("4") || MatrizNumber[PJ_Fila + desplazamientoFila][PJ_Columna + desplazamientoColumna].equals("5")
                 || MatrizNumber[PJ_Fila + desplazamientoFila][PJ_Columna + desplazamientoColumna].equals("6") || MatrizNumber[PJ_Fila + desplazamientoFila][PJ_Columna + desplazamientoColumna].equals("7"))
                 && !CanEat) {
+            withoutdead = false;
             FlowController.getInstance().setVidas(FlowController.getInstance().getVidas() - 1);
             VidasRestantes(FlowController.getInstance().getVidas());
             FlowController.getInstance().setMatrizRespaldo(MatrizRespaldo);
             FlowController.getInstance().goMain("GameView");
         }
+        
         for (Node node : gridGame.getChildren()) {
             if (GridPane.getRowIndex(node) != null && GridPane.getRowIndex(node) == PJ_Fila
                     && GridPane.getColumnIndex(node) != null && GridPane.getColumnIndex(node) == PJ_Columna) {
@@ -455,11 +470,27 @@ public class GameViewController implements Initializable {
         if (nodeToRemove != null) {
             gridGame.getChildren().remove(nodeToRemove);
         }
+        
         if (MatrizNumber[PJ_Fila + desplazamientoFila][PJ_Columna + desplazamientoColumna].equals("2")) {
             FlowController.getInstance().setPuntos(FlowController.getInstance().getPuntos() + 10);
             TextPoints.setText("" + FlowController.getInstance().getPuntos());
             if (FlowController.getInstance().getPuntos() > 900) {
                 velocidadBlinky = 0.20;
+            }
+            coinseat--;
+            if(coinseat == (coinstotal-5) && withoutdead){
+                
+                cancelBlinky();
+                cancelPinky();
+                isMoving = false;
+                isMovingPinky = false;
+                velocidadBlinky = 0.20;
+                velocidadPinky = 0.20;
+                BlinkyMove(9, 12, false);
+                PinkyMove(10, 12, false);
+                isMoving = true;
+                isMovingPinky = true;
+                iniciarContadorDe30Segundos();
             }
         }
         if (MatrizNumber[PJ_Fila + desplazamientoFila][PJ_Columna + desplazamientoColumna].equals("1")) {
@@ -471,6 +502,7 @@ public class GameViewController implements Initializable {
             PauseTransition pause = new PauseTransition(Duration.seconds(10));
             pause.setOnFinished(event -> {
                 CanEat = false;
+                consecutivo = false;
                 Blinky = "/cr/ac/una/pac/man/images/Ghosts/Blinky.png";
                 Pinky = "/cr/ac/una/pac/man/images/Ghosts/Pinky.png";
                 Inky = "/cr/ac/una/pac/man/images/Ghosts/Inky.png";
@@ -491,7 +523,14 @@ public class GameViewController implements Initializable {
             cancelInky();
         }
         if (MatrizGhost[PJ_Fila][PJ_Columna].equals("4")) {
-
+            if (!consecutivo) {
+                FlowController.setPuntos(FlowController.getPuntos() + 300);
+                TextPoints.setText("" + FlowController.getInstance().getPuntos());
+                consecutivo = true;
+            } else {
+                FlowController.setPuntos(FlowController.getPuntos() + 400);
+                TextPoints.setText("" + FlowController.getInstance().getPuntos());
+            }
             Blinky = "/cr/ac/una/pac/man/images/Ghosts/Dead.png";
             ghost = CrearImagen(Blinky);
             MatrizNumber[PJ_Fila][PJ_Columna] = MatrizRespaldo[PJ_Fila][PJ_Columna];
@@ -504,7 +543,14 @@ public class GameViewController implements Initializable {
             isMoving = true;
 
         } else if (MatrizGhost[PJ_Fila][PJ_Columna].equals("7")) {
-
+            if (!consecutivo) {
+                FlowController.setPuntos(FlowController.getPuntos() + 300);
+                TextPoints.setText("" + FlowController.getInstance().getPuntos());
+                consecutivo = true;
+            } else {
+                FlowController.setPuntos(FlowController.getPuntos() + 400);
+                TextPoints.setText("" + FlowController.getInstance().getPuntos());
+            }
             Pinky = "/cr/ac/una/pac/man/images/Ghosts/Dead.png";
             ghost = CrearImagen(Pinky);
             MatrizNumber[PJ_Fila][PJ_Columna] = MatrizRespaldo[PJ_Fila][PJ_Columna];
@@ -517,7 +563,14 @@ public class GameViewController implements Initializable {
             isMovingPinky = true;
 
         } else if (MatrizGhost[PJ_Fila][PJ_Columna].equals("5")) {
-
+            if (!consecutivo) {
+                FlowController.setPuntos(FlowController.getPuntos() + 300);
+                TextPoints.setText("" + FlowController.getInstance().getPuntos());
+                consecutivo = true;
+            } else {
+                FlowController.setPuntos(FlowController.getPuntos() + 400);
+                TextPoints.setText("" + FlowController.getInstance().getPuntos());
+            }
             Clyde = "/cr/ac/una/pac/man/images/Ghosts/Dead.png";
             ghost = CrearImagen(Clyde);
             MatrizNumber[PJ_Fila][PJ_Columna] = MatrizRespaldo[PJ_Fila][PJ_Columna];
@@ -530,7 +583,14 @@ public class GameViewController implements Initializable {
             isMovingClyde = true;
 
         } else if (MatrizGhost[PJ_Fila][PJ_Columna].equals("6")) {
-
+            if (!consecutivo) {
+                FlowController.setPuntos(FlowController.getPuntos() + 300);
+                TextPoints.setText("" + FlowController.getInstance().getPuntos());
+                consecutivo = true;
+            } else {
+                FlowController.setPuntos(FlowController.getPuntos() + 400);
+                TextPoints.setText("" + FlowController.getInstance().getPuntos());
+            }
             Inky = "/cr/ac/una/pac/man/images/Ghosts/Dead.png";
             ghost = CrearImagen(Inky);
             MatrizNumber[PJ_Fila][PJ_Columna] = MatrizRespaldo[PJ_Fila][PJ_Columna];
@@ -548,8 +608,8 @@ public class GameViewController implements Initializable {
         if (MatrizNumber[PJ_Fila + desplazamientoFila][PJ_Columna + desplazamientoColumna].equals("@")) {
             MatrizNumber[PJ_Fila + desplazamientoFila][PJ_Columna + desplazamientoColumna] = "@";
             MatrizRespaldo[PJ_Fila + desplazamientoFila][PJ_Columna + desplazamientoColumna] = "@";
-        }else{
-        MatrizNumber[PJ_Fila + desplazamientoFila][PJ_Columna + desplazamientoColumna] = "3";
+        } else {
+            MatrizNumber[PJ_Fila + desplazamientoFila][PJ_Columna + desplazamientoColumna] = "3";
         }
         for (Node node : gridGame.getChildren()) {
             if (GridPane.getRowIndex(node) != null && GridPane.getRowIndex(node) == PJ_Fila
@@ -664,7 +724,7 @@ public class GameViewController implements Initializable {
             isMoving = true;
             Posicion inicio = new Posicion(Blinky_Fila, Blinky_Columna, 0);
             Posicion objetivo = new Posicion(fila, columna, 0);
-            List<Posicion> ruta = Dijsktra(MatrizNumber, inicio, objetivo);
+            List<Posicion> ruta = algoritmos.Dijsktra(MatrizNumber, inicio, objetivo);
             MoverRutaBlinky(ruta, death);
         }
     }
@@ -674,7 +734,7 @@ public class GameViewController implements Initializable {
             isMovingPinky = true;
             Posicion inicio = new Posicion(Pinky_Fila, Pinky_Columna, 0);
             Posicion objetivo = new Posicion(Fila, Columna, 0);
-            List<Posicion> ruta = Dijsktra(MatrizNumber, inicio, objetivo);
+            List<Posicion> ruta = algoritmos.Dijsktra(MatrizNumber, inicio, objetivo);
             MoverRutaPinky(ruta, death);
         }
     }
@@ -690,7 +750,7 @@ public class GameViewController implements Initializable {
             isMovingInky = true;
             Posicion inicio = new Posicion(Inky_Fila, Inky_Columna, 0);
             Posicion objetivo = new Posicion(Fila, Columna, 0);
-            List<Posicion> ruta = BFS(MatrizNumber, inicio, objetivo);
+            List<Posicion> ruta = algoritmos.BFS(MatrizNumber, inicio, objetivo);
             MoverRutaInky(ruta, death);
         }
     }
@@ -707,7 +767,7 @@ public class GameViewController implements Initializable {
             isMovingClyde = true;
             Posicion inicio = new Posicion(Clyde_Fila, Clyde_Columna, 0);
             Posicion objetivo = new Posicion(Fila, Columna, 0);
-            List<Posicion> ruta = Floyd(MatrizNumber, inicio, objetivo);
+            List<Posicion> ruta = algoritmos.Floyd(MatrizNumber, inicio, objetivo);
             MoverRutaClyde(ruta, death);
         }
     }
@@ -716,10 +776,6 @@ public class GameViewController implements Initializable {
     private void Back(ActionEvent event) {
         FlowController.getInstance().setImportar(false);
         FlowController.getInstance().goMain("MainView");
-    }
-
-    private boolean esPosicionValida(int fila, int columna, int filas, int columnas) {
-        return fila >= 0 && fila < filas && columna >= 0 && columna < columnas;
     }
 
 //----------------------------------------------------------------------MOVER RUTA----------------------------------------------------------------------
@@ -745,6 +801,7 @@ public class GameViewController implements Initializable {
                     VidasRestantes(FlowController.getInstance().getVidas());
                     FlowController.getInstance().setMatrizRespaldo(MatrizRespaldo);
                     FlowController.getInstance().goMain("GameView");
+                    withoutdead = false;
                 }
                 for (Node node : gridGame.getChildren()) {
                     if (GridPane.getRowIndex(node) != null && GridPane.getRowIndex(node) == Blinky_Fila
@@ -792,8 +849,8 @@ public class GameViewController implements Initializable {
             isMoving = false;
             if (!CanEat) {
                 Blinky = "/cr/ac/una/pac/man/images/Ghosts/Blinky.png";
-                velocidadBlinky = 1;
             }
+            velocidadBlinky = 1;
         });
         isMoving = true;
         seqTransitionBlinky.play();
@@ -822,6 +879,7 @@ public class GameViewController implements Initializable {
                     VidasRestantes(FlowController.getInstance().getVidas());
                     FlowController.getInstance().setMatrizRespaldo(MatrizRespaldo);
                     FlowController.getInstance().goMain("GameView");
+                    withoutdead = false;
                 }
                 for (Node node : gridGame.getChildren()) {
                     if (GridPane.getRowIndex(node) != null && GridPane.getRowIndex(node) == Pinky_Fila
@@ -869,8 +927,8 @@ public class GameViewController implements Initializable {
             isMovingPinky = false;
             if (!CanEat) {
                 Pinky = "/cr/ac/una/pac/man/images/Ghosts/Pinky.png";
-                velocidadPinky = 1;
             }
+            velocidadPinky = 1;
         });
         isMovingPinky = true;
         seqTransitionPinky.play();
@@ -899,6 +957,7 @@ public class GameViewController implements Initializable {
                     VidasRestantes(FlowController.getInstance().getVidas());
                     FlowController.getInstance().setMatrizRespaldo(MatrizRespaldo);
                     FlowController.getInstance().goMain("GameView");
+                    withoutdead = false;
                 }
                 for (Node node : gridGame.getChildren()) {
                     if (GridPane.getRowIndex(node) != null && GridPane.getRowIndex(node) == Inky_Fila
@@ -976,6 +1035,7 @@ public class GameViewController implements Initializable {
                     VidasRestantes(FlowController.getInstance().getVidas());
                     FlowController.getInstance().setMatrizRespaldo(MatrizRespaldo);
                     FlowController.getInstance().goMain("GameView");
+                    withoutdead = false;
                 }
                 for (Node node : gridGame.getChildren()) {
                     if (GridPane.getRowIndex(node) != null && GridPane.getRowIndex(node) == Clyde_Fila
@@ -1054,157 +1114,4 @@ public class GameViewController implements Initializable {
         }
     }
 
-    //----------------------------------------------------------------------DIJSKTRA----------------------------------------------------------------------
-    public List<Posicion> Dijsktra(String[][] matriz, Posicion inicio, Posicion objetivo) {
-        int filas = matriz.length;
-        int columnas = matriz[0].length;
-        String ObstaculoCaja = "#";
-        int[] FilasAlrededor = {-1, 0, 1, 0};
-        int[] ColumbasAlrededor = {0, 1, 0, -1};
-
-        int[][] distancias = new int[filas][columnas];
-        for (int[] row : distancias) {
-            Arrays.fill(row, Integer.MAX_VALUE);
-        }
-        distancias[inicio.fila][inicio.columna] = 0;
-
-        Posicion[][] PosicionesAnteriores = new Posicion[filas][columnas];
-        PriorityQueue<Posicion> colaPrioridad = new PriorityQueue<>(Comparator.comparingInt(p -> p.distancia));
-        colaPrioridad.offer(new Posicion(inicio.fila, inicio.columna, 0));
-
-        while (!colaPrioridad.isEmpty()) {
-            Posicion actual = colaPrioridad.poll();
-
-            if (actual.fila == objetivo.fila && actual.columna == objetivo.columna) {
-                return construirRuta(PosicionesAnteriores, inicio, objetivo);
-            }
-            for (int j = 0; j < 4; j++) {
-                int nuevaFila = actual.fila + FilasAlrededor[j];
-                int nuevaColumna = actual.columna + ColumbasAlrededor[j];
-                if (esPosicionValida(nuevaFila, nuevaColumna, filas, columnas)
-                        && !matriz[nuevaFila][nuevaColumna].equals(ObstaculoCaja)
-                        && distancias[nuevaFila][nuevaColumna] > actual.distancia + 1) {
-                    colaPrioridad.offer(new Posicion(nuevaFila, nuevaColumna, actual.distancia + 1));
-                    distancias[nuevaFila][nuevaColumna] = actual.distancia + 1;
-                    PosicionesAnteriores[nuevaFila][nuevaColumna] = actual;
-                }
-            }
-        }
-        return new ArrayList<>();
-    }
-
-    private List<Posicion> construirRuta(Posicion[][] PosicionRealizada, Posicion inicio, Posicion objetivo) {
-        List<Posicion> ruta = new ArrayList<>();
-        Posicion actual = objetivo;
-        while (actual != null) {
-            ruta.add(0, actual);
-            if (actual.equals(inicio)) {
-                break;
-            }
-            actual = PosicionRealizada[actual.fila][actual.columna];
-        }
-        return ruta;
-    }
-    //-------------------------------------------------------------------------FIN-----------------------------------------------------------------------
-
-    //-------------------------------------------------------------------------BFS----------------------------------------------------------------------
-    public List<Posicion> BFS(String[][] matriz, Posicion inicio, Posicion objetivo) {
-        int filas = matriz.length;
-        int columnas = matriz[0].length;
-        String ObstaculoCaja = "#";
-        int[] FilasAlrededor = {-1, 0, 1, 0};
-        int[] ColumbasAlrededor = {0, 1, 0, -1};
-
-        boolean[][] PaseoMiedo = new boolean[filas][columnas];
-        Posicion[][] PosicionesAnteriores = new Posicion[filas][columnas];
-        Queue<Posicion> cola = new LinkedList<>();
-        cola.offer(inicio);
-
-        while (!cola.isEmpty()) {
-            Posicion actual = cola.poll();
-
-            if (actual.fila == objetivo.fila && actual.columna == objetivo.columna) {
-                return construirRuta(PosicionesAnteriores, inicio, objetivo);
-            }
-            for (int j = 0; j < 4; j++) {
-                int nuevaFila = actual.fila + FilasAlrededor[j];
-                int nuevaColumna = actual.columna + ColumbasAlrededor[j];
-                if (esPosicionValida(nuevaFila, nuevaColumna, filas, columnas) && !PaseoMiedo[nuevaFila][nuevaColumna]
-                        && !matriz[nuevaFila][nuevaColumna].equals(ObstaculoCaja)) {
-                    cola.offer(new Posicion(nuevaFila, nuevaColumna));
-                    PaseoMiedo[nuevaFila][nuevaColumna] = true;
-                    PosicionesAnteriores[nuevaFila][nuevaColumna] = actual;
-
-                }
-            }
-        }
-        return new ArrayList<>();
-    }
-    //-------------------------------------------------------------------------FIN------------------------------------------------------------------------
-
-    //------------------------------------------------------------------------FLOYD----------------------------------------------------------------------
-    public List<Posicion> Floyd(String[][] matriz, Posicion inicio, Posicion objetivo) {
-        int filas = matriz.length;
-        int columnas = matriz[0].length;
-        int n = filas * columnas;
-        String ObstaculoCaja = "#";
-
-        int[][] distancias = new int[n][n];
-        int[][] predecesor = new int[n][n];
-
-        for (int i = 0; i < n; i++) {
-            Arrays.fill(distancias[i], Integer.MAX_VALUE);
-            Arrays.fill(predecesor[i], -1);  // -1 indica que no hay predecesor
-            distancias[i][i] = 0;
-        }
-
-        int[] FilasAlrededor = {-1, 0, 1, 0};
-        int[] ColumbasAlrededor = {0, 1, 0, -1};
-
-        for (int i = 0; i < filas; i++) {
-            for (int j = 0; j < columnas; j++) {
-                if (!matriz[i][j].equals(ObstaculoCaja)) {
-                    for (int k = 0; k < 4; k++) {
-                        int nuevaFila = i + FilasAlrededor[k];
-                        int nuevaColumna = j + ColumbasAlrededor[k];
-                        if (esPosicionValida(nuevaFila, nuevaColumna, filas, columnas)
-                                && !matriz[nuevaFila][nuevaColumna].equals(ObstaculoCaja)) {
-                            distancias[i * columnas + j][nuevaFila * columnas + nuevaColumna] = 1;
-                            predecesor[i * columnas + j][nuevaFila * columnas + nuevaColumna] = i * columnas + j;
-                        }
-                    }
-                }
-            }
-        }
-
-        for (int k = 0; k < n; k++) {
-            for (int i = 0; i < n; i++) {
-                for (int j = 0; j < n; j++) {
-                    if (distancias[i][k] != Integer.MAX_VALUE && distancias[k][j] != Integer.MAX_VALUE
-                            && distancias[i][j] > distancias[i][k] + distancias[k][j]) {
-                        distancias[i][j] = distancias[i][k] + distancias[k][j];
-                        predecesor[i][j] = predecesor[k][j];
-                    }
-                }
-            }
-        }
-
-        int from = inicio.fila * columnas + inicio.columna;
-        int to = objetivo.fila * columnas + objetivo.columna;
-
-        if (distancias[from][to] == Integer.MAX_VALUE) {
-            return new ArrayList<>(); // No hay camino
-        }
-
-        List<Posicion> ruta = new ArrayList<>();
-        while (to != from) {
-            ruta.add(new Posicion(to / columnas, to % columnas));
-            to = predecesor[from][to];
-        }
-        ruta.add(inicio);
-        Collections.reverse(ruta);
-
-        return ruta;
-    }
-    //------------------------------------------------------------------------FIN----------------------------------------------------------------------
 }
