@@ -16,10 +16,13 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.LogRecord;
+import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
 import javafx.animation.SequentialTransition;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -107,6 +110,9 @@ public class GameViewController implements Initializable {
     private int coinseat = 0;
     private boolean withoutdead = true;
     private boolean pausa = false;
+    private boolean move = false;
+    private KeyEvent eventAux = null;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         TextLevel.setText(Integer.toString(FlowController.getNivel()));
@@ -118,6 +124,7 @@ public class GameViewController implements Initializable {
 
             scene.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
                 MovimientoPersonaje(event);
+                move = true;
             });
         });
         FlowController.getInstance().setImportar(true);
@@ -332,12 +339,34 @@ public class GameViewController implements Initializable {
             }
         }
     }
+private Timeline movementTimeline;
+public void MovimientoPersonaje(KeyEvent event) {
+    // First, if there's an existing timeline (from a previous key press), stop it.
+    if (movementTimeline != null) {
+        movementTimeline.stop();
+    }
 
-    public void MovimientoPersonaje(KeyEvent event) {
+    switch (event.getCode()) {
+        case UP:
+        case DOWN:
+        case LEFT:
+        case RIGHT:
+            eventAux = event;
+            break;
+        default:
+            return; 
+    }
+    movementTimeline = new Timeline(new KeyFrame(Duration.seconds(0.2), e -> moveCharacter()));
+    movementTimeline.setCycleCount(Timeline.INDEFINITE);
+    movementTimeline.play();
+}
+
+    private void moveCharacter() {
         if (Comenzar) {
             ValiteMove++;
             ImageView PersonajeMove = CrearImagen("/cr/ac/una/pac/man/images/pacmanR.png");
-            switch (event.getCode()) {
+
+            switch (eventAux.getCode()) {
                 case UP:
                     PersonajeMove.setImage(new Image("/cr/ac/una/pac/man/images/pacmanU.png"));
                     moverPersonaje(-1, 0, PersonajeMove);
@@ -357,7 +386,8 @@ public class GameViewController implements Initializable {
                 default:
                     break;
             }
-            if (ValiteMove % 5 == 0) {
+
+            if (ValiteMove % 12 == 0) {
                 if (!isMoving && !pausa) {
                     BlinkyMove(PJ_Fila, PJ_Columna, false);
                 }
@@ -416,16 +446,16 @@ public class GameViewController implements Initializable {
     }
 
     private void iniciarContadorDe30Segundos() {
-    ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+        ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 
         pausa = true;
 
-    executor.schedule(() -> {
-        pausa = false;
-        executor.shutdown();
-    }, 30, TimeUnit.SECONDS);
-}
-    
+        executor.schedule(() -> {
+            pausa = false;
+            executor.shutdown();
+        }, 30, TimeUnit.SECONDS);
+    }
+
     public void Mover(int desplazamientoFila, int desplazamientoColumna, ImageView PersonajeMove) {
         int AuxFila = 0;
         int AuxColum = 0;
@@ -459,7 +489,7 @@ public class GameViewController implements Initializable {
             FlowController.getInstance().setMatrizRespaldo(MatrizRespaldo);
             FlowController.getInstance().goMain("GameView");
         }
-        
+
         for (Node node : gridGame.getChildren()) {
             if (GridPane.getRowIndex(node) != null && GridPane.getRowIndex(node) == PJ_Fila
                     && GridPane.getColumnIndex(node) != null && GridPane.getColumnIndex(node) == PJ_Columna) {
@@ -470,7 +500,7 @@ public class GameViewController implements Initializable {
         if (nodeToRemove != null) {
             gridGame.getChildren().remove(nodeToRemove);
         }
-        
+
         if (MatrizNumber[PJ_Fila + desplazamientoFila][PJ_Columna + desplazamientoColumna].equals("2")) {
             FlowController.getInstance().setPuntos(FlowController.getInstance().getPuntos() + 10);
             TextPoints.setText("" + FlowController.getInstance().getPuntos());
@@ -478,8 +508,8 @@ public class GameViewController implements Initializable {
                 velocidadBlinky = 0.20;
             }
             coinseat--;
-            if(coinseat == (coinstotal-5) && withoutdead){
-                
+            if (coinseat == (coinstotal/2) && withoutdead) {
+
                 cancelBlinky();
                 cancelPinky();
                 isMoving = false;
