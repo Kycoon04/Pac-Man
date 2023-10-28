@@ -15,14 +15,12 @@ import java.util.ResourceBundle;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.LogRecord;
 import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
 import javafx.animation.SequentialTransition;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -68,6 +66,8 @@ public class GameViewController implements Initializable {
     private Button Life6;
     @FXML
     private Text TextPerdisteVida;
+    @FXML
+    private Button btnPower;
 
     private int PJ_Columna;
     private int PJ_Fila;
@@ -112,9 +112,12 @@ public class GameViewController implements Initializable {
     private boolean pausa = false;
     private boolean move = false;
     private KeyEvent eventAux = null;
+    private double velocidadPacMan = 0.2;
+    private int coints = 10;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        btnPower.setDisable(true);
         TextLevel.setText(Integer.toString(FlowController.getNivel()));
         Background.setImage(new Image("/cr/ac/una/pac/man/images/Backgrounds/Nivel" + FlowController.getNivel() + ".jpg"));
         CargarNivel();
@@ -339,27 +342,27 @@ public class GameViewController implements Initializable {
             }
         }
     }
-private Timeline movementTimeline;
-public void MovimientoPersonaje(KeyEvent event) {
-    // First, if there's an existing timeline (from a previous key press), stop it.
-    if (movementTimeline != null) {
-        movementTimeline.stop();
-    }
+    private Timeline movementTimeline;
 
-    switch (event.getCode()) {
-        case UP:
-        case DOWN:
-        case LEFT:
-        case RIGHT:
-            eventAux = event;
-            break;
-        default:
-            return; 
+    public void MovimientoPersonaje(KeyEvent event) {
+        if (movementTimeline != null) {
+            movementTimeline.stop();
+        }
+
+        switch (event.getCode()) {
+            case UP:
+            case DOWN:
+            case LEFT:
+            case RIGHT:
+                eventAux = event;
+                break;
+            default:
+                return;
+        }
+        movementTimeline = new Timeline(new KeyFrame(Duration.seconds(velocidadPacMan), e -> moveCharacter()));
+        movementTimeline.setCycleCount(Timeline.INDEFINITE);
+        movementTimeline.play();
     }
-    movementTimeline = new Timeline(new KeyFrame(Duration.seconds(0.2), e -> moveCharacter()));
-    movementTimeline.setCycleCount(Timeline.INDEFINITE);
-    movementTimeline.play();
-}
 
     private void moveCharacter() {
         if (Comenzar) {
@@ -387,7 +390,7 @@ public void MovimientoPersonaje(KeyEvent event) {
                     break;
             }
 
-            if (ValiteMove % 12 == 0) {
+            if (ValiteMove % 5 == 0) {
                 if (!isMoving && !pausa) {
                     BlinkyMove(PJ_Fila, PJ_Columna, false);
                 }
@@ -502,14 +505,13 @@ public void MovimientoPersonaje(KeyEvent event) {
         }
 
         if (MatrizNumber[PJ_Fila + desplazamientoFila][PJ_Columna + desplazamientoColumna].equals("2")) {
-            FlowController.getInstance().setPuntos(FlowController.getInstance().getPuntos() + 10);
+            FlowController.getInstance().setPuntos(FlowController.getInstance().getPuntos() + coints);
             TextPoints.setText("" + FlowController.getInstance().getPuntos());
             if (FlowController.getInstance().getPuntos() > 900) {
                 velocidadBlinky = 0.20;
             }
             coinseat--;
-            if (coinseat == (coinstotal/2) && withoutdead) {
-
+            if (coinseat == (coinstotal / 2) && withoutdead) {
                 cancelBlinky();
                 cancelPinky();
                 isMoving = false;
@@ -553,14 +555,7 @@ public void MovimientoPersonaje(KeyEvent event) {
             cancelInky();
         }
         if (MatrizGhost[PJ_Fila][PJ_Columna].equals("4")) {
-            if (!consecutivo) {
-                FlowController.setPuntos(FlowController.getPuntos() + 300);
-                TextPoints.setText("" + FlowController.getInstance().getPuntos());
-                consecutivo = true;
-            } else {
-                FlowController.setPuntos(FlowController.getPuntos() + 400);
-                TextPoints.setText("" + FlowController.getInstance().getPuntos());
-            }
+            seguidos();
             Blinky = "/cr/ac/una/pac/man/images/Ghosts/Dead.png";
             ghost = CrearImagen(Blinky);
             MatrizNumber[PJ_Fila][PJ_Columna] = MatrizRespaldo[PJ_Fila][PJ_Columna];
@@ -573,14 +568,7 @@ public void MovimientoPersonaje(KeyEvent event) {
             isMoving = true;
 
         } else if (MatrizGhost[PJ_Fila][PJ_Columna].equals("7")) {
-            if (!consecutivo) {
-                FlowController.setPuntos(FlowController.getPuntos() + 300);
-                TextPoints.setText("" + FlowController.getInstance().getPuntos());
-                consecutivo = true;
-            } else {
-                FlowController.setPuntos(FlowController.getPuntos() + 400);
-                TextPoints.setText("" + FlowController.getInstance().getPuntos());
-            }
+            seguidos();
             Pinky = "/cr/ac/una/pac/man/images/Ghosts/Dead.png";
             ghost = CrearImagen(Pinky);
             MatrizNumber[PJ_Fila][PJ_Columna] = MatrizRespaldo[PJ_Fila][PJ_Columna];
@@ -593,14 +581,7 @@ public void MovimientoPersonaje(KeyEvent event) {
             isMovingPinky = true;
 
         } else if (MatrizGhost[PJ_Fila][PJ_Columna].equals("5")) {
-            if (!consecutivo) {
-                FlowController.setPuntos(FlowController.getPuntos() + 300);
-                TextPoints.setText("" + FlowController.getInstance().getPuntos());
-                consecutivo = true;
-            } else {
-                FlowController.setPuntos(FlowController.getPuntos() + 400);
-                TextPoints.setText("" + FlowController.getInstance().getPuntos());
-            }
+            seguidos();
             Clyde = "/cr/ac/una/pac/man/images/Ghosts/Dead.png";
             ghost = CrearImagen(Clyde);
             MatrizNumber[PJ_Fila][PJ_Columna] = MatrizRespaldo[PJ_Fila][PJ_Columna];
@@ -613,14 +594,7 @@ public void MovimientoPersonaje(KeyEvent event) {
             isMovingClyde = true;
 
         } else if (MatrizGhost[PJ_Fila][PJ_Columna].equals("6")) {
-            if (!consecutivo) {
-                FlowController.setPuntos(FlowController.getPuntos() + 300);
-                TextPoints.setText("" + FlowController.getInstance().getPuntos());
-                consecutivo = true;
-            } else {
-                FlowController.setPuntos(FlowController.getPuntos() + 400);
-                TextPoints.setText("" + FlowController.getInstance().getPuntos());
-            }
+            seguidos();
             Inky = "/cr/ac/una/pac/man/images/Ghosts/Dead.png";
             ghost = CrearImagen(Inky);
             MatrizNumber[PJ_Fila][PJ_Columna] = MatrizRespaldo[PJ_Fila][PJ_Columna];
@@ -668,6 +642,18 @@ public void MovimientoPersonaje(KeyEvent event) {
             FlowController.setNivel(FlowController.getNivel() + 1);
             FlowController.setPuntos(FlowController.getPuntos() + (FlowController.getNivel() * 100));
             FlowController.getInstance().goMain("MainView");
+        }
+    }
+
+    public void seguidos() {
+        if (!consecutivo) {
+            FlowController.setPuntos(FlowController.getPuntos() + 300);
+            TextPoints.setText("" + FlowController.getInstance().getPuntos());
+            consecutivo = true;
+        } else {
+            btnPower.setDisable(false);
+            FlowController.setPuntos(FlowController.getPuntos() + 400);
+            TextPoints.setText("" + FlowController.getInstance().getPuntos());
         }
     }
 
@@ -1142,6 +1128,18 @@ public void MovimientoPersonaje(KeyEvent event) {
         if (seqTransitionPinky != null) {
             seqTransitionPinky.stop();
         }
+    }
+
+    @FXML
+    private void Power(ActionEvent events) {
+        velocidadPacMan = 0.08;
+        coints = 20;
+        PauseTransition pausePower = new PauseTransition(Duration.seconds(6));
+        pausePower.setOnFinished(event -> {
+            velocidadPacMan = 0.2;
+            coints = 10;
+        });
+        pausePower.play();
     }
 
 }

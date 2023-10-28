@@ -190,5 +190,17 @@
             <Font name="System Bold" size="36.0" />
          </font>
       </Text>
+      <Button fx:id="btnPower" layoutX="410.0" layoutY="641.0" mnemonicParsing="false" onAction="#Power" prefHeight="48.0" prefWidth="43.0" style="-fx-background-color: transparent;">
+         <graphic>
+            <ImageView fitHeight="58.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/Power.png" />
+               </image>
+            </ImageView>
+         </graphic>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
    </children>
 </AnchorPane>
