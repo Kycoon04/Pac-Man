@@ -114,10 +114,17 @@ public class GameViewController implements Initializable {
     private KeyEvent eventAux = null;
     private double velocidadPacMan = 0.2;
     private int coints = 10;
+    @FXML
+    private Button btnComprar;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         btnPower.setDisable(true);
+        if (FlowController.getInstance().getPuntos() > 1500) {
+            btnComprar.setDisable(false);
+        } else {
+            btnComprar.setDisable(true);
+        }
         TextLevel.setText(Integer.toString(FlowController.getNivel()));
         Background.setImage(new Image("/cr/ac/una/pac/man/images/Backgrounds/Nivel" + FlowController.getNivel() + ".jpg"));
         CargarNivel();
@@ -427,6 +434,9 @@ public class GameViewController implements Initializable {
 
     public void VidasRestantes(int vida) {
         switch (vida) {
+            case 6:
+                Life6.setDisable(true);
+                break;
             case 5:
                 Life6.setDisable(true);
                 break;
@@ -441,6 +451,32 @@ public class GameViewController implements Initializable {
                 break;
             case 1:
                 Life2.setDisable(true);
+                break;
+            case 0:
+                Life1.setDisable(true);
+                break;
+        }
+    }
+
+    public void VidasRestantesMas(int vida) {
+        switch (vida) {
+            case 6:
+                Life6.setDisable(false);
+                break;
+            case 5:
+                Life6.setDisable(false);
+                break;
+            case 4:
+                Life5.setDisable(false);
+                break;
+            case 3:
+                Life4.setDisable(false);
+                break;
+            case 2:
+                Life3.setDisable(false);
+                break;
+            case 1:
+                Life2.setDisable(false);
                 break;
             case 0:
                 Life1.setDisable(true);
@@ -489,8 +525,13 @@ public class GameViewController implements Initializable {
             withoutdead = false;
             FlowController.getInstance().setVidas(FlowController.getInstance().getVidas() - 1);
             VidasRestantes(FlowController.getInstance().getVidas());
-            FlowController.getInstance().setMatrizRespaldo(MatrizRespaldo);
-            FlowController.getInstance().goMain("GameView");
+            movementTimeline.stop();
+            if (FlowController.getInstance().getVidas() == 0) {
+                FlowController.getInstance().goMain("MainView");
+            } else {
+                FlowController.getInstance().setMatrizRespaldo(MatrizRespaldo);
+                FlowController.getInstance().goMain("GameView");
+            }
         }
 
         for (Node node : gridGame.getChildren()) {
@@ -510,6 +551,7 @@ public class GameViewController implements Initializable {
             if (FlowController.getInstance().getPuntos() > 900) {
                 velocidadBlinky = 0.20;
             }
+
             coinseat--;
             if (coinseat == (coinstotal / 2) && withoutdead) {
                 cancelBlinky();
@@ -524,6 +566,9 @@ public class GameViewController implements Initializable {
                 isMovingPinky = true;
                 iniciarContadorDe30Segundos();
             }
+        }
+        if (FlowController.getInstance().getPuntos() > 1500) {
+            btnComprar.setDisable(false);
         }
         if (MatrizNumber[PJ_Fila + desplazamientoFila][PJ_Columna + desplazamientoColumna].equals("1")) {
             CanEat = true;
@@ -815,8 +860,14 @@ public class GameViewController implements Initializable {
                 if (MatrizNumber[ruta.get(index).fila][ruta.get(index).columna].equals("3") && !CanEat) {
                     FlowController.getInstance().setVidas(FlowController.getInstance().getVidas() - 1);
                     VidasRestantes(FlowController.getInstance().getVidas());
-                    FlowController.getInstance().setMatrizRespaldo(MatrizRespaldo);
-                    FlowController.getInstance().goMain("GameView");
+                    movementTimeline.stop();
+                    if (FlowController.getInstance().getVidas() == 0) {
+                        movementTimeline.stop();
+                        FlowController.getInstance().goMain("MainView");
+                    } else {
+                        FlowController.getInstance().setMatrizRespaldo(MatrizRespaldo);
+                        FlowController.getInstance().goMain("GameView");
+                    }
                     withoutdead = false;
                 }
                 for (Node node : gridGame.getChildren()) {
@@ -893,8 +944,13 @@ public class GameViewController implements Initializable {
                 if (MatrizNumber[ruta.get(index).fila][ruta.get(index).columna].equals("3") && !CanEat) {
                     FlowController.getInstance().setVidas(FlowController.getInstance().getVidas() - 1);
                     VidasRestantes(FlowController.getInstance().getVidas());
-                    FlowController.getInstance().setMatrizRespaldo(MatrizRespaldo);
-                    FlowController.getInstance().goMain("GameView");
+                    movementTimeline.stop();
+                    if (FlowController.getInstance().getVidas() == 0) {
+                        FlowController.getInstance().goMain("MainView");
+                    } else {
+                        FlowController.getInstance().setMatrizRespaldo(MatrizRespaldo);
+                        FlowController.getInstance().goMain("GameView");
+                    }
                     withoutdead = false;
                 }
                 for (Node node : gridGame.getChildren()) {
@@ -971,8 +1027,13 @@ public class GameViewController implements Initializable {
                 if (MatrizNumber[ruta.get(index).fila][ruta.get(index).columna].equals("3") && !CanEat) {
                     FlowController.getInstance().setVidas(FlowController.getInstance().getVidas() - 1);
                     VidasRestantes(FlowController.getInstance().getVidas());
-                    FlowController.getInstance().setMatrizRespaldo(MatrizRespaldo);
-                    FlowController.getInstance().goMain("GameView");
+                    movementTimeline.stop();
+                    if (FlowController.getInstance().getVidas() == 0) {
+                        FlowController.getInstance().goMain("MainView");
+                    } else {
+                        FlowController.getInstance().setMatrizRespaldo(MatrizRespaldo);
+                        FlowController.getInstance().goMain("GameView");
+                    }
                     withoutdead = false;
                 }
                 for (Node node : gridGame.getChildren()) {
@@ -1049,8 +1110,13 @@ public class GameViewController implements Initializable {
                 if (MatrizNumber[ruta.get(index).fila][ruta.get(index).columna].equals("3") && !CanEat) {
                     FlowController.getInstance().setVidas(FlowController.getInstance().getVidas() - 1);
                     VidasRestantes(FlowController.getInstance().getVidas());
-                    FlowController.getInstance().setMatrizRespaldo(MatrizRespaldo);
-                    FlowController.getInstance().goMain("GameView");
+                    movementTimeline.stop();
+                    if (FlowController.getInstance().getVidas() == 0) {
+                        FlowController.getInstance().goMain("MainView");
+                    } else {
+                        FlowController.getInstance().setMatrizRespaldo(MatrizRespaldo);
+                        FlowController.getInstance().goMain("GameView");
+                    }
                     withoutdead = false;
                 }
                 for (Node node : gridGame.getChildren()) {
@@ -1140,6 +1206,21 @@ public class GameViewController implements Initializable {
             coints = 10;
         });
         pausePower.play();
+    }
+
+    @FXML
+    private void Comprar(ActionEvent event) {
+
+        FlowController.getInstance().setPuntos(FlowController.getInstance().getPuntos() - 1500);
+        TextPoints.setText("" + FlowController.getInstance().getPuntos());
+        if (FlowController.getInstance().getPuntos() > 1500) {
+            btnComprar.setDisable(false);
+        } else {
+            btnComprar.setDisable(true);
+        }
+        FlowController.getInstance().setVidas(FlowController.getInstance().getVidas() + 1);
+        VidasRestantesMas(FlowController.getInstance().getVidas());
+
     }
 
 }

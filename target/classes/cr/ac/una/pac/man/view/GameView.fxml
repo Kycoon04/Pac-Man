@@ -202,5 +202,23 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
+      <Button fx:id="btnComprar" contentDisplay="CENTER" layoutX="24.0" layoutY="325.0" mnemonicParsing="false" onAction="#Comprar" prefHeight="60.0" prefWidth="264.0" text="Comprar" textAlignment="CENTER">
+         <graphic>
+            <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/Text&amp;Icons/yellow_button02.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </ImageView>
+         </graphic>
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
    </children>
 </AnchorPane>
