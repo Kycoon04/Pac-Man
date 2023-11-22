@@ -31,18 +31,72 @@ public class FlowController {
     private static Controller controller;
     private static int Difficulty;
     private static int Nivel=1;
+    private User usuario;
     static boolean Importar=false;
     static String[][] MatrizRespaldo = new String[13][13];
     static int vidas = 6;
+    static boolean AuxExperto = true;
     static boolean isPause= false;
     static int Puntos = 0;
     static int PuntosWin = 0;
     static boolean Win = false;
+    static boolean clasico=false;
+    static boolean Experto = false;
+    static int ContadorEncierro=0;
+    static int ContadorFlash=0;
     private FlowController() {
+    }
+
+    public User getUsuario() {
+        return usuario;
+    }
+
+    public static int getContadorFlash() {
+        return ContadorFlash;
+    }
+
+    public static void setContadorFlash(int ContadorFlash) {
+        FlowController.ContadorFlash = ContadorFlash;
+    }
+
+    public static int getContadorEncierro() {
+        return ContadorEncierro;
+    }
+
+    public static void setContadorEncierro(int ContadorEncierro) {
+        FlowController.ContadorEncierro = ContadorEncierro;
+    }
+
+    public static boolean isAuxExperto() {
+        return AuxExperto;
+    }
+
+    public static void setAuxExperto(boolean AuxExperto) {
+        FlowController.AuxExperto = AuxExperto;
+    }
+
+    public static boolean isExperto() {
+        return Experto;
+    }
+
+    public static void setExperto(boolean Experto) {
+        FlowController.Experto = Experto;
+    }
+
+    public void setUsuario(User usuario) {
+        this.usuario = usuario;
     }
 
     public static boolean isWin() {
         return Win;
+    }
+
+    public static boolean isClasico() {
+        return clasico;
+    }
+
+    public static void setClasico(boolean clasico) {
+        FlowController.clasico = clasico;
     }
 
     public static void setWin(boolean Win) {

@@ -90,15 +90,32 @@ public class MainViewController extends Controller implements Initializable {
         ColorAdjust colorAdjust = new ColorAdjust();
         colorAdjust.setBrightness(-0.9);
         MainView.toFront();
-        btnDelete.setDisable(true);
-        btnUpdate.setDisable(true);
         iconCazador.setEffect(colorAdjust);
         iconClasico.setEffect(colorAdjust);
         iconEncierro.setEffect(colorAdjust);
         iconExperto.setEffect(colorAdjust);
         iconFlash.setEffect(colorAdjust);
         iconRey.setEffect(colorAdjust);
-
+        if (FlowController.isClasico()) {
+            FlowController.getInstance().getUsuario().getTrophies().add("2");
+        }
+        if (FlowController.isExperto()) {
+            FlowController.getInstance().getUsuario().getTrophies().add("4");
+        }
+        if (FlowController.getContadorEncierro() == 5) {
+            FlowController.getInstance().getUsuario().getTrophies().add("3");
+        }
+        if (FlowController.getContadorFlash() == 5) {
+            FlowController.getInstance().getUsuario().getTrophies().add("5");
+        }
+        if (FlowController.getInstance().getUsuario() != null) {
+            btnDelete.setDisable(false);
+            btnUpdate.setDisable(false);
+            SelectTrophies(FlowController.getInstance().getUsuario());
+        } else {
+            btnDelete.setDisable(true);
+            btnUpdate.setDisable(true);
+        }
         switch (FlowController.getNivel()) {
             case 1:
                 Level2.setDisable(true);
@@ -226,6 +243,7 @@ public class MainViewController extends Controller implements Initializable {
             new Mensaje().showModal(Alert.AlertType.INFORMATION, "Aviso", FlowController.getMainStage(), "Selecionaste al jugador " + player.getName());
             SelectTrophies(player);
         }
+        FlowController.getInstance().setUsuario(player);
     }
 
     public void SelectTrophies(User user) {
@@ -324,15 +342,9 @@ public class MainViewController extends Controller implements Initializable {
     @FXML
     private void Update(ActionEvent event) {
         TextCSV text = new TextCSV();
-        User user = new User();
-        user.setName(NameField.getText());
-        user.getTrophies().add("1");
-        user.getTrophies().add("2");
-        user.getTrophies().add("3");
-        user.getTrophies().add("4");
-        text.saveUserToFile(user, "user.txt");
+        text.saveUserToFile(FlowController.getInstance().getUsuario(), "user.txt");
         new Mensaje().showModal(Alert.AlertType.INFORMATION, "Aviso", FlowController.getMainStage(), "Se actualizo correctamente el jugador");
-        SelectTrophies(user);
+        SelectTrophies(FlowController.getInstance().getUsuario());
     }
 
     @FXML

@@ -5,10 +5,10 @@ LivesLose:
 Ghosteat:
 BestTime:
 Timeallgame:
-trophies_1
 trophies_2
-trophies_3
 trophies_4
+trophies_1
+trophies_3
 name:Ana
 PointWin:
 Point1Live:
