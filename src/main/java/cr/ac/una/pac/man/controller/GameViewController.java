@@ -523,6 +523,7 @@ public class GameViewController implements Initializable {
                 || MatrizNumber[PJ_Fila + desplazamientoFila][PJ_Columna + desplazamientoColumna].equals("6") || MatrizNumber[PJ_Fila + desplazamientoFila][PJ_Columna + desplazamientoColumna].equals("7"))
                 && !CanEat) {
             withoutdead = false;
+            FlowController.setLostLive(FlowController.getLostLive()+1);
             FlowController.setAuxExperto(false);
             FlowController.getInstance().setVidas(FlowController.getInstance().getVidas() - 1);
             VidasRestantes(FlowController.getInstance().getVidas());
@@ -568,7 +569,7 @@ public class GameViewController implements Initializable {
                 FlowController.setContadorEncierro(FlowController.getContadorEncierro()+1);
             }
         }
-        if (FlowController.getInstance().getPuntos() > 100) {
+        if (FlowController.getInstance().getPuntos() > 1500) {
             btnComprar.setDisable(false);
         }
         if (MatrizNumber[PJ_Fila + desplazamientoFila][PJ_Columna + desplazamientoColumna].equals("1")) {
@@ -601,6 +602,7 @@ public class GameViewController implements Initializable {
             cancelInky();
         }
         if (MatrizGhost[PJ_Fila][PJ_Columna].equals("4")) {
+            FlowController.setContadorFastantas(FlowController.getContadorFastantas()+1);
             seguidos();
             Blinky = "/cr/ac/una/pac/man/images/Ghosts/Dead.png";
             ghost = CrearImagen(Blinky);
@@ -614,6 +616,7 @@ public class GameViewController implements Initializable {
             isMoving = true;
 
         } else if (MatrizGhost[PJ_Fila][PJ_Columna].equals("7")) {
+            FlowController.setContadorFastantas(FlowController.getContadorFastantas()+1);
             seguidos();
             Pinky = "/cr/ac/una/pac/man/images/Ghosts/Dead.png";
             ghost = CrearImagen(Pinky);
@@ -627,6 +630,7 @@ public class GameViewController implements Initializable {
             isMovingPinky = true;
 
         } else if (MatrizGhost[PJ_Fila][PJ_Columna].equals("5")) {
+            FlowController.setContadorFastantas(FlowController.getContadorFastantas()+1);
             seguidos();
             Clyde = "/cr/ac/una/pac/man/images/Ghosts/Dead.png";
             ghost = CrearImagen(Clyde);
@@ -640,6 +644,7 @@ public class GameViewController implements Initializable {
             isMovingClyde = true;
 
         } else if (MatrizGhost[PJ_Fila][PJ_Columna].equals("6")) {
+            FlowController.setContadorFastantas(FlowController.getContadorFastantas()+1);
             seguidos();
             Inky = "/cr/ac/una/pac/man/images/Ghosts/Dead.png";
             ghost = CrearImagen(Inky);
@@ -692,6 +697,9 @@ public class GameViewController implements Initializable {
             }
             if(FlowController.isAuxExperto()){
             FlowController.setExperto(true);
+            }
+            if(FlowController.getInstance().getDifficulty()==3){
+            FlowController.setRey(FlowController.getRey()+1);
             }
             FlowController.getInstance().goMain("MainView");
         }
@@ -865,6 +873,7 @@ public class GameViewController implements Initializable {
                 }
                 gridGame.add(PersonajeMove, ruta.get(index).columna, ruta.get(index).fila);
                 if (MatrizNumber[ruta.get(index).fila][ruta.get(index).columna].equals("3") && !CanEat) {
+                    FlowController.setLostLive(FlowController.getLostLive()+1);
                     FlowController.getInstance().setVidas(FlowController.getInstance().getVidas() - 1);
                     FlowController.setAuxExperto(false);
                     VidasRestantes(FlowController.getInstance().getVidas());
@@ -950,6 +959,7 @@ public class GameViewController implements Initializable {
                 }
                 gridGame.add(PersonajeMove, ruta.get(index).columna, ruta.get(index).fila);
                 if (MatrizNumber[ruta.get(index).fila][ruta.get(index).columna].equals("3") && !CanEat) {
+                    FlowController.setLostLive(FlowController.getLostLive()+1);
                     FlowController.getInstance().setVidas(FlowController.getInstance().getVidas() - 1);
                     FlowController.setAuxExperto(false);
                     VidasRestantes(FlowController.getInstance().getVidas());
@@ -1035,6 +1045,7 @@ public class GameViewController implements Initializable {
                 gridGame.add(PersonajeMove, ruta.get(index).columna, ruta.get(index).fila);
                 if (MatrizNumber[ruta.get(index).fila][ruta.get(index).columna].equals("3") && !CanEat) {
                     FlowController.getInstance().setVidas(FlowController.getInstance().getVidas() - 1);
+                    FlowController.setLostLive(FlowController.getLostLive()+1);
                     FlowController.setAuxExperto(false);
                     VidasRestantes(FlowController.getInstance().getVidas());
                     movementTimeline.stop();
@@ -1119,6 +1130,7 @@ public class GameViewController implements Initializable {
 
                 if (MatrizNumber[ruta.get(index).fila][ruta.get(index).columna].equals("3") && !CanEat) {
                     FlowController.getInstance().setVidas(FlowController.getInstance().getVidas() - 1);
+                    FlowController.setLostLive(FlowController.getLostLive()+1);
                     FlowController.setAuxExperto(false);
                     VidasRestantes(FlowController.getInstance().getVidas());
                     movementTimeline.stop();

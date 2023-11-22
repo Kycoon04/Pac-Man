@@ -31,7 +31,7 @@ public class FlowController {
     private static Controller controller;
     private static int Difficulty;
     private static int Nivel=1;
-    private User usuario;
+    private User usuario ;
     static boolean Importar=false;
     static String[][] MatrizRespaldo = new String[13][13];
     static int vidas = 6;
@@ -44,11 +44,38 @@ public class FlowController {
     static boolean Experto = false;
     static int ContadorEncierro=0;
     static int ContadorFlash=0;
+    static int ContadorFastantas=0;
+    static int Rey;
+    static int LostLive;
     private FlowController() {
     }
 
     public User getUsuario() {
         return usuario;
+    }
+
+    public static int getLostLive() {
+        return LostLive;
+    }
+
+    public static void setLostLive(int LostLive) {
+        FlowController.LostLive = LostLive;
+    }
+
+    public static int getRey() {
+        return Rey;
+    }
+
+    public static void setRey(int Rey) {
+        FlowController.Rey = Rey;
+    }
+
+    public static int getContadorFastantas() {
+        return ContadorFastantas;
+    }
+
+    public static void setContadorFastantas(int ContadorFastantas) {
+        FlowController.ContadorFastantas = ContadorFastantas;
     }
 
     public static int getContadorFlash() {

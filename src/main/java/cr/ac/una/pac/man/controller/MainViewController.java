@@ -108,9 +108,17 @@ public class MainViewController extends Controller implements Initializable {
         if (FlowController.getContadorFlash() == 5) {
             FlowController.getInstance().getUsuario().getTrophies().add("5");
         }
+        if (FlowController.getContadorFastantas() == 5) {
+            FlowController.getInstance().getUsuario().getTrophies().add("1");
+        }
+        if (FlowController.getRey() == 10) {
+            FlowController.getInstance().getUsuario().getTrophies().add("6");
+        }
         if (FlowController.getInstance().getUsuario() != null) {
             btnDelete.setDisable(false);
             btnUpdate.setDisable(false);
+            FlowController.getInstance().getUsuario().setPointWin(""+FlowController.getPuntos());
+            FlowController.getInstance().getUsuario().setLivesLose(""+FlowController.getLostLive());
             SelectTrophies(FlowController.getInstance().getUsuario());
         } else {
             btnDelete.setDisable(true);
@@ -244,6 +252,77 @@ public class MainViewController extends Controller implements Initializable {
             SelectTrophies(player);
         }
         FlowController.getInstance().setUsuario(player);
+        if(FlowController.getInstance().getUsuario().getNivel().size()==0){
+        FlowController.setNivel(1);
+        }else{
+        FlowController.setNivel(FlowController.getInstance().getUsuario().getNivel().size());
+        }
+                switch (FlowController.getNivel()) {
+            case 1:
+                Level2.setDisable(true);
+                Level3.setDisable(true);
+                Level4.setDisable(true);
+                Level5.setDisable(true);
+                Level6.setDisable(true);
+                Level7.setDisable(true);
+                Level8.setDisable(true);
+                Level9.setDisable(true);
+                Level10.setDisable(true);
+                break;
+            case 2:
+                Level3.setDisable(true);
+                Level4.setDisable(true);
+                Level5.setDisable(true);
+                Level6.setDisable(true);
+                Level7.setDisable(true);
+                Level8.setDisable(true);
+                Level9.setDisable(true);
+                Level10.setDisable(true);
+                break;
+            case 3:
+                Level4.setDisable(true);
+                Level5.setDisable(true);
+                Level6.setDisable(true);
+                Level7.setDisable(true);
+                Level8.setDisable(true);
+                Level9.setDisable(true);
+                Level10.setDisable(true);
+                break;
+            case 4:
+                Level5.setDisable(true);
+                Level6.setDisable(true);
+                Level7.setDisable(true);
+                Level8.setDisable(true);
+                Level9.setDisable(true);
+                Level10.setDisable(true);
+                break;
+            case 5:
+                Level6.setDisable(true);
+                Level7.setDisable(true);
+                Level8.setDisable(true);
+                Level9.setDisable(true);
+                Level10.setDisable(true);
+                break;
+            case 6:
+                Level7.setDisable(true);
+                Level8.setDisable(true);
+                Level9.setDisable(true);
+                Level10.setDisable(true);
+                break;
+            case 7:
+                Level8.setDisable(true);
+                Level9.setDisable(true);
+                Level10.setDisable(true);
+                break;
+            case 8:
+                Level9.setDisable(true);
+                Level10.setDisable(true);
+                break;
+            case 9:
+                Level10.setDisable(true);
+                break;
+        }
+        
     }
 
     public void SelectTrophies(User user) {

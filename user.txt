@@ -1,10 +1,12 @@
 name:Jose
-PointWin:
+PointWin:3640
 Point1Live:
 LivesLose:
 Ghosteat:
 BestTime:
-Timeallgame:
+Timeallgame:Nivel_1=1
+Nivel_2=2
+
 trophies_2
 trophies_4
 trophies_1
