@@ -19,14 +19,13 @@ public class User {
     private String PointWin="";
     private String Point1Live="";
     private String LivesLose="";
-    private HashMap<String,Integer> Nivel;
+    private String Nivel;
     private List<String> trophies = new ArrayList<>();
     private String Ghosteat="";
     private String BestTime="";
     private String Timeallgame="";
 
     public User() {
-    Nivel = new HashMap<String,Integer>();
     }
     
     public void update(User newUser) {
@@ -36,7 +35,6 @@ public class User {
         this.Ghosteat = newUser.getGhosteat();
         this.BestTime = newUser.getBestTime();
         this.Timeallgame = newUser.getTimeallgame();
-        this.Nivel = newUser.getNivel();
         this.trophies = newUser.getTrophies();
     }
 
@@ -48,6 +46,13 @@ public class User {
         this.trophies = trophies;
     }
 
+    public String getNivel() {
+        return Nivel;
+    }
+
+    public void setNivel(String Nivel) {
+        this.Nivel = Nivel;
+    }
     
     public String getName() {
         return name;
@@ -79,14 +84,6 @@ public class User {
 
     public void setLivesLose(String LivesLose) {
         this.LivesLose = LivesLose;
-    }
-
-    public HashMap<String, Integer> getNivel() {
-        return Nivel;
-    }
-
-    public void setNivel(HashMap<String, Integer> Nivel) {
-        this.Nivel = Nivel;
     }
 
     public String getGhosteat() {
@@ -123,9 +120,7 @@ public class User {
         sb.append("\nGhosteat:").append(Ghosteat);
         sb.append("\nBestTime:").append(BestTime);
         sb.append("\nTimeallgame:").append(Timeallgame);
-        for (Map.Entry<String, Integer> entry : Nivel.entrySet()) {
-            sb.append("\nNivel_").append(entry.getKey()).append("=").append(entry.getValue());
-        }
+        sb.append("\nNivel:").append(Nivel);
         for(int i = 0;i<trophies.size();i++){
         sb.append("\ntrophies_").append(trophies.get(i));
         }

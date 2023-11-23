@@ -108,11 +108,9 @@ public class TextCSV {
                 writer.newLine();
                 writer.write("BestTime:" + existingUser.getBestTime());
                 writer.newLine();
+                writer.write("Nivel:" + existingUser.getNivel());
+                writer.newLine();
                 writer.write("Timeallgame:" + existingUser.getTimeallgame());
-                for (Map.Entry<String, Integer> entry : existingUser.getNivel().entrySet()) {
-                    writer.write("Nivel_" + entry.getKey() + "=" + entry.getValue());
-                    writer.newLine();
-                }
                 for (int i = 0; i < existingUser.getTrophies().size(); i++) {
                     writer.write("\ntrophies_" + existingUser.getTrophies().get(i));
                 }
@@ -132,22 +130,17 @@ public class TextCSV {
                 user.setPointWin(part.substring(9));
             } else if (part.startsWith("Point1Live:") && part.length() > 11) {
                 user.setPoint1Live(part.substring(11));
-            } else if (part.startsWith("LivesLose:") && part.length() > 11) {
-                user.setLivesLose(part.substring(11));
+            } else if (part.startsWith("LivesLose:") && part.length() > 10) {
+                user.setLivesLose(part.substring(10));
             } else if (part.startsWith("Ghosteat:") && part.length() > 9) {
                 user.setGhosteat(part.substring(9));
             } else if (part.startsWith("BestTime:") && part.length() > 9) {
                 user.setBestTime(part.substring(9));
             } else if (part.startsWith("Timeallgame:") && part.length() > 12) {
                 user.setTimeallgame(part.substring(12));
-            } else if (part.startsWith("Nivel_") && part.length() > 6) {
-                int index = part.indexOf('=');
-                if (index > 6 && part.length() > index + 1) {
-                    String key = part.substring(6, index);
-                    Integer value = Integer.valueOf(part.substring(index + 1));
-                    user.getNivel().put(key, value);
-                }
-            } else if (part.startsWith("trophies_") && part.length() > 9) {
+            } else if (part.startsWith("Nivel:") && part.length() > 6) {
+                user.setNivel(part.substring(6));
+            }else if (part.startsWith("trophies_") && part.length() > 9) {
                 user.getTrophies().add(part.substring(9));
             }
         }

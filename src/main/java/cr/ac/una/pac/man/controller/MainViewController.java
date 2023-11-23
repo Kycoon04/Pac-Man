@@ -117,78 +117,15 @@ public class MainViewController extends Controller implements Initializable {
         if (FlowController.getInstance().getUsuario() != null) {
             btnDelete.setDisable(false);
             btnUpdate.setDisable(false);
-            FlowController.getInstance().getUsuario().setPointWin(""+FlowController.getPuntos());
-            FlowController.getInstance().getUsuario().setLivesLose(""+FlowController.getLostLive());
+            FlowController.getInstance().getUsuario().setPointWin("" + FlowController.getPuntos());
+            FlowController.getInstance().getUsuario().setLivesLose("" + FlowController.getLostLive());
+            FlowController.getInstance().getUsuario().setNivel(""+FlowController.getNivel());
             SelectTrophies(FlowController.getInstance().getUsuario());
         } else {
             btnDelete.setDisable(true);
             btnUpdate.setDisable(true);
         }
-        switch (FlowController.getNivel()) {
-            case 1:
-                Level2.setDisable(true);
-                Level3.setDisable(true);
-                Level4.setDisable(true);
-                Level5.setDisable(true);
-                Level6.setDisable(true);
-                Level7.setDisable(true);
-                Level8.setDisable(true);
-                Level9.setDisable(true);
-                Level10.setDisable(true);
-                break;
-            case 2:
-                Level3.setDisable(true);
-                Level4.setDisable(true);
-                Level5.setDisable(true);
-                Level6.setDisable(true);
-                Level7.setDisable(true);
-                Level8.setDisable(true);
-                Level9.setDisable(true);
-                Level10.setDisable(true);
-                break;
-            case 3:
-                Level4.setDisable(true);
-                Level5.setDisable(true);
-                Level6.setDisable(true);
-                Level7.setDisable(true);
-                Level8.setDisable(true);
-                Level9.setDisable(true);
-                Level10.setDisable(true);
-                break;
-            case 4:
-                Level5.setDisable(true);
-                Level6.setDisable(true);
-                Level7.setDisable(true);
-                Level8.setDisable(true);
-                Level9.setDisable(true);
-                Level10.setDisable(true);
-                break;
-            case 5:
-                Level6.setDisable(true);
-                Level7.setDisable(true);
-                Level8.setDisable(true);
-                Level9.setDisable(true);
-                Level10.setDisable(true);
-                break;
-            case 6:
-                Level7.setDisable(true);
-                Level8.setDisable(true);
-                Level9.setDisable(true);
-                Level10.setDisable(true);
-                break;
-            case 7:
-                Level8.setDisable(true);
-                Level9.setDisable(true);
-                Level10.setDisable(true);
-                break;
-            case 8:
-                Level9.setDisable(true);
-                Level10.setDisable(true);
-                break;
-            case 9:
-                Level10.setDisable(true);
-                break;
-        }
+        nivelActual();
         if (FlowController.isWin()) {
             FlowController.setWin(false);
             pointsWin.setText(Integer.toString(FlowController.getPuntosWin()));
@@ -252,77 +189,10 @@ public class MainViewController extends Controller implements Initializable {
             SelectTrophies(player);
         }
         FlowController.getInstance().setUsuario(player);
-        if(FlowController.getInstance().getUsuario().getNivel().size()==0){
-        FlowController.setNivel(1);
-        }else{
-        FlowController.setNivel(FlowController.getInstance().getUsuario().getNivel().size());
-        }
-                switch (FlowController.getNivel()) {
-            case 1:
-                Level2.setDisable(true);
-                Level3.setDisable(true);
-                Level4.setDisable(true);
-                Level5.setDisable(true);
-                Level6.setDisable(true);
-                Level7.setDisable(true);
-                Level8.setDisable(true);
-                Level9.setDisable(true);
-                Level10.setDisable(true);
-                break;
-            case 2:
-                Level3.setDisable(true);
-                Level4.setDisable(true);
-                Level5.setDisable(true);
-                Level6.setDisable(true);
-                Level7.setDisable(true);
-                Level8.setDisable(true);
-                Level9.setDisable(true);
-                Level10.setDisable(true);
-                break;
-            case 3:
-                Level4.setDisable(true);
-                Level5.setDisable(true);
-                Level6.setDisable(true);
-                Level7.setDisable(true);
-                Level8.setDisable(true);
-                Level9.setDisable(true);
-                Level10.setDisable(true);
-                break;
-            case 4:
-                Level5.setDisable(true);
-                Level6.setDisable(true);
-                Level7.setDisable(true);
-                Level8.setDisable(true);
-                Level9.setDisable(true);
-                Level10.setDisable(true);
-                break;
-            case 5:
-                Level6.setDisable(true);
-                Level7.setDisable(true);
-                Level8.setDisable(true);
-                Level9.setDisable(true);
-                Level10.setDisable(true);
-                break;
-            case 6:
-                Level7.setDisable(true);
-                Level8.setDisable(true);
-                Level9.setDisable(true);
-                Level10.setDisable(true);
-                break;
-            case 7:
-                Level8.setDisable(true);
-                Level9.setDisable(true);
-                Level10.setDisable(true);
-                break;
-            case 8:
-                Level9.setDisable(true);
-                Level10.setDisable(true);
-                break;
-            case 9:
-                Level10.setDisable(true);
-                break;
-        }
-        
+        FlowController.setNivel(Integer.parseUnsignedInt(FlowController.getInstance().getUsuario().getNivel()));
+        FlowController.setPuntos(Integer.parseUnsignedInt(player.getPointWin()));
+        FlowController.setLostLive(Integer.parseUnsignedInt(player.getLivesLose()));
+        nivelActual();
     }
 
     public void SelectTrophies(User user) {
@@ -430,4 +300,120 @@ public class MainViewController extends Controller implements Initializable {
     private void CloseWin(ActionEvent event) {
         MainView.toFront();
     }
+
+    public void nivelActual() {
+        switch (FlowController.getNivel()) {
+            case 1:
+                Level2.setDisable(true);
+                Level3.setDisable(true);
+                Level4.setDisable(true);
+                Level5.setDisable(true);
+                Level6.setDisable(true);
+                Level7.setDisable(true);
+                Level8.setDisable(true);
+                Level9.setDisable(true);
+                Level10.setDisable(true);
+                break;
+            case 2:
+                Level2.setDisable(false);
+                Level3.setDisable(true);
+                Level4.setDisable(true);
+                Level5.setDisable(true);
+                Level6.setDisable(true);
+                Level7.setDisable(true);
+                Level8.setDisable(true);
+                Level9.setDisable(true);
+                Level10.setDisable(true);
+                break;
+            case 3:
+                Level2.setDisable(false);
+                Level3.setDisable(false);
+                Level4.setDisable(true);
+                Level5.setDisable(true);
+                Level6.setDisable(true);
+                Level7.setDisable(true);
+                Level8.setDisable(true);
+                Level9.setDisable(true);
+                Level10.setDisable(true);
+                break;
+            case 4:
+                Level2.setDisable(false);
+                Level3.setDisable(false);
+                Level4.setDisable(false);
+                Level5.setDisable(true);
+                Level6.setDisable(true);
+                Level7.setDisable(true);
+                Level8.setDisable(true);
+                Level9.setDisable(true);
+                Level10.setDisable(true);
+                break;
+            case 5:
+                Level2.setDisable(false);
+                Level3.setDisable(false);
+                Level4.setDisable(false);
+                Level5.setDisable(false);
+                Level6.setDisable(true);
+                Level7.setDisable(true);
+                Level8.setDisable(true);
+                Level9.setDisable(true);
+                Level10.setDisable(true);
+                break;
+            case 6:
+                Level2.setDisable(false);
+                Level3.setDisable(false);
+                Level4.setDisable(false);
+                Level5.setDisable(false);
+                Level6.setDisable(false);
+                Level7.setDisable(true);
+                Level8.setDisable(true);
+                Level9.setDisable(true);
+                Level10.setDisable(true);
+                break;
+            case 7:
+                Level2.setDisable(false);
+                Level3.setDisable(false);
+                Level4.setDisable(false);
+                Level5.setDisable(false);
+                Level6.setDisable(false);
+                Level7.setDisable(false);
+                Level8.setDisable(true);
+                Level9.setDisable(true);
+                Level10.setDisable(true);
+                break;
+            case 8:
+                Level2.setDisable(false);
+                Level3.setDisable(false);
+                Level4.setDisable(false);
+                Level5.setDisable(false);
+                Level6.setDisable(false);
+                Level7.setDisable(false);
+                Level8.setDisable(false);
+                Level9.setDisable(true);
+                Level10.setDisable(true);
+                break;
+            case 9:
+                Level2.setDisable(false);
+                Level3.setDisable(false);
+                Level4.setDisable(false);
+                Level5.setDisable(false);
+                Level6.setDisable(false);
+                Level7.setDisable(false);
+                Level8.setDisable(false);
+                Level9.setDisable(false);
+                Level10.setDisable(true);
+                break;
+            case 10:
+                Level2.setDisable(false);
+                Level3.setDisable(false);
+                Level4.setDisable(false);
+                Level5.setDisable(false);
+                Level6.setDisable(false);
+                Level7.setDisable(false);
+                Level8.setDisable(false);
+                Level9.setDisable(false);
+                Level10.setDisable(false);
+                break;
+        }
+    }
+
 }
