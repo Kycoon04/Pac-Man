@@ -53,6 +53,44 @@ public class Algoritmos {
         return new ArrayList<>();
     }
 
+    public List<Posicion> DijkstraLarga(String[][] matriz, Posicion inicio, Posicion objetivo) {
+        int filas = matriz.length;
+        int columnas = matriz[0].length;
+        String ObstaculoCaja = "#";
+        int[] FilasAlrededor = {-1, 0, 1, 0};
+        int[] ColumbasAlrededor = {0, 1, 0, -1};
+        Queue<Posicion> cola = new LinkedList<>();
+        boolean[][] visitado = new boolean[filas][columnas];
+        Posicion[][] PosicionesAnteriores = new Posicion[filas][columnas];
+
+        cola.offer(inicio);
+        visitado[inicio.fila][inicio.columna] = true;
+        Posicion objetivoMasLejano = inicio; // Inicialmente, el objetivo más lejano es el inicio.
+
+        while (!cola.isEmpty()) {
+            Posicion actual = cola.poll();
+
+            for (int j = 0; j < 4; j++) {
+                int nuevaFila = actual.fila + FilasAlrededor[j];
+                int nuevaColumna = actual.columna + ColumbasAlrededor[j];
+                if (esPosicionValida(nuevaFila, nuevaColumna, filas, columnas)
+                        && !matriz[nuevaFila][nuevaColumna].equals(ObstaculoCaja)
+                        && !visitado[nuevaFila][nuevaColumna]) {
+                    cola.offer(new Posicion(nuevaFila, nuevaColumna, 0));
+                    visitado[nuevaFila][nuevaColumna] = true;
+                    PosicionesAnteriores[nuevaFila][nuevaColumna] = actual;
+                    objetivoMasLejano = new Posicion(nuevaFila, nuevaColumna, 0);
+                }
+            }
+        }
+
+        if (objetivoMasLejano.fila == inicio.fila && objetivoMasLejano.columna == inicio.columna) {
+            return new ArrayList<>();
+        }
+
+        return construirRuta(PosicionesAnteriores, inicio, objetivoMasLejano);
+    }
+
     private List<Posicion> construirRuta(Posicion[][] PosicionRealizada, Posicion inicio, Posicion objetivo) {
         List<Posicion> ruta = new ArrayList<>();
         Posicion actual = objetivo;

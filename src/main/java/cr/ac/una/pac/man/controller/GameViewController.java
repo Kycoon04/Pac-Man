@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.ResourceBundle;
@@ -115,7 +116,7 @@ public class GameViewController implements Initializable {
     private KeyEvent eventAux = null;
     private double velocidadPacMan = 0.2;
     private int coints = 10;
-    private int puntos=0;
+    private int puntos = 0;
     Text tiempoText = new Text("Tiempo: 00:00");
     @FXML
     private Button btnComprar;
@@ -717,15 +718,15 @@ public class GameViewController implements Initializable {
         if (!Continue()) {
             FlowController.setWin(true);
             FlowController.setPuntosWin(FlowController.getNivel() * 100);
-            puntos +=FlowController.getNivel() * 100;
+            puntos += FlowController.getNivel() * 100;
             FlowController.setPuntos(FlowController.getPuntos() + (FlowController.getNivel() * 100));
             FlowController.setPuntosXpartidaMax(puntos);
             if (FlowController.getNivel() + 1 == 10) {
                 FlowController.setClasico(true);
                 FlowController.setNivel(10);
-            }else{
+            } else {
                 System.out.println(FlowController.getNivel());
-            FlowController.setNivel(FlowController.getNivel() + 1);
+                FlowController.setNivel(FlowController.getNivel() + 1);
             }
             FlowController.setNivelTotal(FlowController.getNivel() + 1);
             FlowController.setBestTime(Integer.parseUnsignedInt(tiempoText.getText()));
@@ -837,7 +838,20 @@ public class GameViewController implements Initializable {
             isMoving = true;
             Posicion inicio = new Posicion(Blinky_Fila, Blinky_Columna, 0);
             Posicion objetivo = new Posicion(fila, columna, 0);
-            List<Posicion> ruta = algoritmos.Dijsktra(MatrizNumber, inicio, objetivo);
+            List<Posicion> ruta = new ArrayList<>();
+            if (FlowController.getInstance().getDifficulty() == 1) {
+                ruta = algoritmos.DijkstraLarga(MatrizNumber, inicio, objetivo);
+            } else if (FlowController.getInstance().getDifficulty() == 3) {
+                ruta = algoritmos.Dijsktra(MatrizNumber, inicio, objetivo);
+            } else {
+                Random random = new Random();
+                int randomNumber = random.nextInt(2);
+                if (randomNumber == 1) {
+                    ruta = algoritmos.DijkstraLarga(MatrizNumber, inicio, objetivo);
+                } else {
+                    ruta = algoritmos.Dijsktra(MatrizNumber, inicio, objetivo);
+                }
+            }
             MoverRutaBlinky(ruta, death);
         }
     }
@@ -847,7 +861,20 @@ public class GameViewController implements Initializable {
             isMovingPinky = true;
             Posicion inicio = new Posicion(Pinky_Fila, Pinky_Columna, 0);
             Posicion objetivo = new Posicion(Fila, Columna, 0);
-            List<Posicion> ruta = algoritmos.Dijsktra(MatrizNumber, inicio, objetivo);
+            List<Posicion> ruta = new ArrayList<>();
+            if (FlowController.getInstance().getDifficulty() == 1) {
+                ruta = algoritmos.DijkstraLarga(MatrizNumber, inicio, objetivo);
+            } else if (FlowController.getInstance().getDifficulty() == 3) {
+                ruta = algoritmos.Dijsktra(MatrizNumber, inicio, objetivo);
+            } else {
+                Random random = new Random();
+                int randomNumber = random.nextInt(2);
+                if (randomNumber == 1) {
+                    ruta = algoritmos.DijkstraLarga(MatrizNumber, inicio, objetivo);
+                } else {
+                    ruta = algoritmos.Dijsktra(MatrizNumber, inicio, objetivo);
+                }
+            }
             MoverRutaPinky(ruta, death);
         }
     }
@@ -1294,7 +1321,7 @@ public class GameViewController implements Initializable {
     private void Comprar(ActionEvent event) {
 
         FlowController.getInstance().setPuntos(FlowController.getInstance().getPuntos() - 1500);
-        puntos -=1500;
+        puntos -= 1500;
         TextPoints.setText("" + FlowController.getInstance().getPuntos());
         FlowController.setAuxExperto(false);
         if (FlowController.getInstance().getPuntos() > 1500) {
