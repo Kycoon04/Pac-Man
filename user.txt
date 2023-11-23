@@ -1,11 +1,11 @@
 name:Jose
-PointWin:3810
+PointWin:750
 Point1Live:
-LivesLose:2
-Ghosteat:
+LivesLose:5
+Ghosteat:2
 BestTime:
-Nivel:2
-Timeallgame:
+Nivel:1
+Timeallgame:21
 trophies_2
 trophies_4
 trophies_1

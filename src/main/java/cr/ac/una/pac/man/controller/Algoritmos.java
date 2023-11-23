@@ -1,4 +1,3 @@
-
 package cr.ac.una.pac.man.controller;
 
 import cr.ac.una.pac.man.util.Posicion;
@@ -54,44 +53,6 @@ public class Algoritmos {
         return new ArrayList<>();
     }
 
-    /*public List<Posicion> DijsktraContrario(String[][] matriz, Posicion inicio, Posicion objetivo) {
-        int filas = matriz.length;
-        int columnas = matriz[0].length;
-        String ObstaculoCaja = "#";
-        int[] FilasAlrededor = {-1, 0, 1, 0};
-        int[] ColumbasAlrededor = {0, 1, 0, -1};
-
-        int[][] distancias = new int[filas][columnas];
-        for (int[] row : distancias) {
-            Arrays.fill(row, Integer.MIN_VALUE);
-        }
-        distancias[inicio.fila][inicio.columna] = 0;
-
-        Posicion[][] PosicionesAnteriores = new Posicion[filas][columnas];
-        PriorityQueue<Posicion> colaPrioridad = new PriorityQueue<>(Comparator.comparingInt(p -> -p.distancia));
-        colaPrioridad.offer(new Posicion(inicio.fila, inicio.columna, 0));
-
-        while (!colaPrioridad.isEmpty()) {
-            Posicion actual = colaPrioridad.poll();
-
-            if (actual.fila == objetivo.fila && actual.columna == objetivo.columna) {
-                return construirRuta(PosicionesAnteriores, inicio, objetivo);
-            }
-            for (int j = 0; j < 4; j++) {
-                int nuevaFila = actual.fila + FilasAlrededor[j];
-                int nuevaColumna = actual.columna + ColumbasAlrededor[j];
-                if (esPosicionValida(nuevaFila, nuevaColumna, filas, columnas)
-                        && !matriz[nuevaFila][nuevaColumna].equals(ObstaculoCaja)
-                        && distancias[nuevaFila][nuevaColumna] < actual.distancia + 1) {
-                    colaPrioridad.offer(new Posicion(nuevaFila, nuevaColumna, actual.distancia + 1));
-                    distancias[nuevaFila][nuevaColumna] = actual.distancia + 1;
-                    PosicionesAnteriores[nuevaFila][nuevaColumna] = actual;
-                }
-            }
-        }
-        return new ArrayList<>();
-    }*/
-    
     private List<Posicion> construirRuta(Posicion[][] PosicionRealizada, Posicion inicio, Posicion objetivo) {
         List<Posicion> ruta = new ArrayList<>();
         Posicion actual = objetivo;
@@ -104,8 +65,7 @@ public class Algoritmos {
         }
         return ruta;
     }
-    
-    
+
     public List<Posicion> BFS(String[][] matriz, Posicion inicio, Posicion objetivo) {
         int filas = matriz.length;
         int columnas = matriz[0].length;
@@ -138,7 +98,7 @@ public class Algoritmos {
         }
         return new ArrayList<>();
     }
-    
+
     public List<Posicion> Floyd(String[][] matriz, Posicion inicio, Posicion objetivo) {
         int filas = matriz.length;
         int columnas = matriz[0].length;
@@ -202,9 +162,9 @@ public class Algoritmos {
 
         return ruta;
     }
-    
-        private boolean esPosicionValida(int fila, int columna, int filas, int columnas) {
+
+    private boolean esPosicionValida(int fila, int columna, int filas, int columnas) {
         return fila >= 0 && fila < filas && columna >= 0 && columna < columnas;
     }
-    
+
 }

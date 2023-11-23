@@ -45,13 +45,40 @@ public class FlowController {
     static int ContadorEncierro=0;
     static int ContadorFlash=0;
     static int ContadorFastantas=0;
+    static String TimeTotal="";
     static int Rey;
     static int LostLive;
+    static int nivelTotal=1;
+    static int BestTime=0;
     private FlowController() {
     }
 
     public User getUsuario() {
         return usuario;
+    }
+
+    public static int getBestTime() {
+        return BestTime;
+    }
+
+    public static void setBestTime(int BestTime) {
+        FlowController.BestTime = BestTime;
+    }
+
+    public static int getNivelTotal() {
+        return nivelTotal;
+    }
+
+    public static void setNivelTotal(int nivelTotal) {
+        FlowController.nivelTotal = nivelTotal;
+    }
+
+    public static String getTimeTotal() {
+        return TimeTotal;
+    }
+
+    public static void setTimeTotal(String TimeTotal) {
+        FlowController.TimeTotal = TimeTotal;
     }
 
     public static int getLostLive() {

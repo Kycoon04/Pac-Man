@@ -11,3 +11,4 @@ cr\ac\una\pac\man\util\Posicion.class
 module-info.class
 cr\ac\una\pac\man\util\User.class
 cr\ac\una\pac\man\App.class
+cr\ac\una\pac\man\controller\GameViewController$2.class

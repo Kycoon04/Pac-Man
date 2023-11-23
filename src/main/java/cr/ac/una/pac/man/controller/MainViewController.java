@@ -119,7 +119,10 @@ public class MainViewController extends Controller implements Initializable {
             btnUpdate.setDisable(false);
             FlowController.getInstance().getUsuario().setPointWin("" + FlowController.getPuntos());
             FlowController.getInstance().getUsuario().setLivesLose("" + FlowController.getLostLive());
-            FlowController.getInstance().getUsuario().setNivel(""+FlowController.getNivel());
+            FlowController.getInstance().getUsuario().setNivel(""+FlowController.getNivelTotal());
+            FlowController.getInstance().getUsuario().setGhosteat(""+FlowController.getContadorFastantas());
+            FlowController.getInstance().getUsuario().setTimeallgame(""+FlowController.getTimeTotal());
+            FlowController.getInstance().getUsuario().setBestTime(""+FlowController.getBestTime());
             SelectTrophies(FlowController.getInstance().getUsuario());
         } else {
             btnDelete.setDisable(true);
@@ -157,10 +160,13 @@ public class MainViewController extends Controller implements Initializable {
         TextCSV text = new TextCSV();
         User user = new User();
         user.setName(NameField.getText());
-        user.getTrophies().add("1");
-        user.getTrophies().add("2");
-        user.getTrophies().add("3");
-        user.getTrophies().add("4");
+        user.setBestTime("0");
+        user.setGhosteat("0");
+        user.setLivesLose("0");
+        user.setNivel("1");
+        user.setPoint1Live("0");
+        user.setPointWin("0");
+        user.setTimeallgame("0");
         text.saveUserToFile(user, "user.txt");
         new Mensaje().showModal(Alert.AlertType.INFORMATION, "Aviso", FlowController.getMainStage(), "Se registro correctamente el jugador");
     }
@@ -192,6 +198,8 @@ public class MainViewController extends Controller implements Initializable {
         FlowController.setNivel(Integer.parseUnsignedInt(FlowController.getInstance().getUsuario().getNivel()));
         FlowController.setPuntos(Integer.parseUnsignedInt(player.getPointWin()));
         FlowController.setLostLive(Integer.parseUnsignedInt(player.getLivesLose()));
+        FlowController.setContadorFastantas(Integer.parseUnsignedInt(player.getGhosteat()));
+        FlowController.setTimeTotal(player.getTimeallgame());
         nivelActual();
     }
 

@@ -21,6 +21,7 @@ import javafx.animation.SequentialTransition;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -114,6 +115,7 @@ public class GameViewController implements Initializable {
     private KeyEvent eventAux = null;
     private double velocidadPacMan = 0.2;
     private int coints = 10;
+    Text tiempoText = new Text("Tiempo: 00:00");
     @FXML
     private Button btnComprar;
 
@@ -142,6 +144,21 @@ public class GameViewController implements Initializable {
         if (FlowController.getInstance().getPuntos() > 900) {
             velocidadBlinky = 0.20;
         }
+        final int[] segundosTranscurridos = {0};
+        // Crear un Timeline para actualizar el cronómetro
+        Timeline cronometro = new Timeline(
+                new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+                        segundosTranscurridos[0]++;
+                        int minutos = segundosTranscurridos[0] / 60;
+                        int segundos = segundosTranscurridos[0];
+                        tiempoText.setText(String.format("%02d", segundos));
+                    }
+                })
+        );
+        cronometro.setCycleCount(Timeline.INDEFINITE);
+        cronometro.play();
     }
 
     public void CargarNivel() {
@@ -523,11 +540,15 @@ public class GameViewController implements Initializable {
                 || MatrizNumber[PJ_Fila + desplazamientoFila][PJ_Columna + desplazamientoColumna].equals("6") || MatrizNumber[PJ_Fila + desplazamientoFila][PJ_Columna + desplazamientoColumna].equals("7"))
                 && !CanEat) {
             withoutdead = false;
-            FlowController.setLostLive(FlowController.getLostLive()+1);
+            FlowController.setLostLive(FlowController.getLostLive() + 1);
             FlowController.setAuxExperto(false);
             FlowController.getInstance().setVidas(FlowController.getInstance().getVidas() - 1);
             VidasRestantes(FlowController.getInstance().getVidas());
             movementTimeline.stop();
+            cancelPinky();
+            cancelInky();
+            cancelBlinky();
+            cancelClyde();
             if (FlowController.getInstance().getVidas() == 0) {
                 FlowController.getInstance().goMain("MainView");
             } else {
@@ -566,7 +587,7 @@ public class GameViewController implements Initializable {
                 isMoving = true;
                 isMovingPinky = true;
                 iniciarContadorDe30Segundos();
-                FlowController.setContadorEncierro(FlowController.getContadorEncierro()+1);
+                FlowController.setContadorEncierro(FlowController.getContadorEncierro() + 1);
             }
         }
         if (FlowController.getInstance().getPuntos() > 1500) {
@@ -590,19 +611,23 @@ public class GameViewController implements Initializable {
             pause.play();
         }
         if (MatrizNumber[PJ_Fila + desplazamientoFila][PJ_Columna + desplazamientoColumna].equals("4") && CanEat) {
+            FlowController.setContadorFastantas(FlowController.getContadorFastantas() + 1);
             cancelBlinky();
         }
         if (MatrizNumber[PJ_Fila + desplazamientoFila][PJ_Columna + desplazamientoColumna].equals("7") && CanEat) {
+            FlowController.setContadorFastantas(FlowController.getContadorFastantas() + 1);
             cancelPinky();
         }
         if (MatrizNumber[PJ_Fila + desplazamientoFila][PJ_Columna + desplazamientoColumna].equals("5") && CanEat) {
+            FlowController.setContadorFastantas(FlowController.getContadorFastantas() + 1);
             cancelClyde();
         }
         if (MatrizNumber[PJ_Fila + desplazamientoFila][PJ_Columna + desplazamientoColumna].equals("6") && CanEat) {
+            FlowController.setContadorFastantas(FlowController.getContadorFastantas() + 1);
             cancelInky();
         }
         if (MatrizGhost[PJ_Fila][PJ_Columna].equals("4")) {
-            FlowController.setContadorFastantas(FlowController.getContadorFastantas()+1);
+            FlowController.setContadorFastantas(FlowController.getContadorFastantas() + 1);
             seguidos();
             Blinky = "/cr/ac/una/pac/man/images/Ghosts/Dead.png";
             ghost = CrearImagen(Blinky);
@@ -616,7 +641,7 @@ public class GameViewController implements Initializable {
             isMoving = true;
 
         } else if (MatrizGhost[PJ_Fila][PJ_Columna].equals("7")) {
-            FlowController.setContadorFastantas(FlowController.getContadorFastantas()+1);
+            FlowController.setContadorFastantas(FlowController.getContadorFastantas() + 1);
             seguidos();
             Pinky = "/cr/ac/una/pac/man/images/Ghosts/Dead.png";
             ghost = CrearImagen(Pinky);
@@ -630,7 +655,7 @@ public class GameViewController implements Initializable {
             isMovingPinky = true;
 
         } else if (MatrizGhost[PJ_Fila][PJ_Columna].equals("5")) {
-            FlowController.setContadorFastantas(FlowController.getContadorFastantas()+1);
+            FlowController.setContadorFastantas(FlowController.getContadorFastantas() + 1);
             seguidos();
             Clyde = "/cr/ac/una/pac/man/images/Ghosts/Dead.png";
             ghost = CrearImagen(Clyde);
@@ -644,7 +669,7 @@ public class GameViewController implements Initializable {
             isMovingClyde = true;
 
         } else if (MatrizGhost[PJ_Fila][PJ_Columna].equals("6")) {
-            FlowController.setContadorFastantas(FlowController.getContadorFastantas()+1);
+            FlowController.setContadorFastantas(FlowController.getContadorFastantas() + 1);
             seguidos();
             Inky = "/cr/ac/una/pac/man/images/Ghosts/Dead.png";
             ghost = CrearImagen(Inky);
@@ -695,12 +720,15 @@ public class GameViewController implements Initializable {
             if (FlowController.getNivel() + 1 == 2) {
                 FlowController.setClasico(true);
             }
-            if(FlowController.isAuxExperto()){
-            FlowController.setExperto(true);
+            FlowController.setNivelTotal(FlowController.getNivel() + 1);
+            FlowController.setBestTime(Integer.parseUnsignedInt(tiempoText.getText()));
+            if (FlowController.isAuxExperto()) {
+                FlowController.setExperto(true);
             }
-            if(FlowController.getInstance().getDifficulty()==3){
-            FlowController.setRey(FlowController.getRey()+1);
+            if (FlowController.getInstance().getDifficulty() == 3) {
+                FlowController.setRey(FlowController.getRey() + 1);
             }
+            FlowController.setTimeTotal(tiempoText.getText());
             FlowController.getInstance().goMain("MainView");
         }
     }
@@ -851,6 +879,11 @@ public class GameViewController implements Initializable {
     @FXML
     private void Back(ActionEvent event) {
         FlowController.getInstance().setImportar(false);
+        cancelPinky();
+        cancelInky();
+        cancelBlinky();
+        cancelClyde();
+        FlowController.setTimeTotal(tiempoText.getText());
         FlowController.getInstance().goMain("MainView");
     }
 
@@ -873,7 +906,11 @@ public class GameViewController implements Initializable {
                 }
                 gridGame.add(PersonajeMove, ruta.get(index).columna, ruta.get(index).fila);
                 if (MatrizNumber[ruta.get(index).fila][ruta.get(index).columna].equals("3") && !CanEat) {
-                    FlowController.setLostLive(FlowController.getLostLive()+1);
+                    cancelPinky();
+                    cancelInky();
+                    cancelBlinky();
+                    cancelClyde();
+                    FlowController.setLostLive(FlowController.getLostLive() + 1);
                     FlowController.getInstance().setVidas(FlowController.getInstance().getVidas() - 1);
                     FlowController.setAuxExperto(false);
                     VidasRestantes(FlowController.getInstance().getVidas());
@@ -959,7 +996,11 @@ public class GameViewController implements Initializable {
                 }
                 gridGame.add(PersonajeMove, ruta.get(index).columna, ruta.get(index).fila);
                 if (MatrizNumber[ruta.get(index).fila][ruta.get(index).columna].equals("3") && !CanEat) {
-                    FlowController.setLostLive(FlowController.getLostLive()+1);
+                    cancelPinky();
+                    cancelInky();
+                    cancelBlinky();
+                    cancelClyde();
+                    FlowController.setLostLive(FlowController.getLostLive() + 1);
                     FlowController.getInstance().setVidas(FlowController.getInstance().getVidas() - 1);
                     FlowController.setAuxExperto(false);
                     VidasRestantes(FlowController.getInstance().getVidas());
@@ -1044,8 +1085,12 @@ public class GameViewController implements Initializable {
                 }
                 gridGame.add(PersonajeMove, ruta.get(index).columna, ruta.get(index).fila);
                 if (MatrizNumber[ruta.get(index).fila][ruta.get(index).columna].equals("3") && !CanEat) {
+                    cancelPinky();
+                    cancelInky();
+                    cancelBlinky();
+                    cancelClyde();
                     FlowController.getInstance().setVidas(FlowController.getInstance().getVidas() - 1);
-                    FlowController.setLostLive(FlowController.getLostLive()+1);
+                    FlowController.setLostLive(FlowController.getLostLive() + 1);
                     FlowController.setAuxExperto(false);
                     VidasRestantes(FlowController.getInstance().getVidas());
                     movementTimeline.stop();
@@ -1129,8 +1174,12 @@ public class GameViewController implements Initializable {
                 gridGame.add(PersonajeMove, ruta.get(index).columna, ruta.get(index).fila);
 
                 if (MatrizNumber[ruta.get(index).fila][ruta.get(index).columna].equals("3") && !CanEat) {
+                    cancelPinky();
+                    cancelInky();
+                    cancelBlinky();
+                    cancelClyde();
                     FlowController.getInstance().setVidas(FlowController.getInstance().getVidas() - 1);
-                    FlowController.setLostLive(FlowController.getLostLive()+1);
+                    FlowController.setLostLive(FlowController.getLostLive() + 1);
                     FlowController.setAuxExperto(false);
                     VidasRestantes(FlowController.getInstance().getVidas());
                     movementTimeline.stop();
@@ -1221,7 +1270,7 @@ public class GameViewController implements Initializable {
 
     @FXML
     private void Power(ActionEvent events) {
-        FlowController.setContadorFlash(FlowController.getContadorFlash()+1);
+        FlowController.setContadorFlash(FlowController.getContadorFlash() + 1);
         velocidadPacMan = 0.08;
         coints = 20;
         PauseTransition pausePower = new PauseTransition(Duration.seconds(6));
