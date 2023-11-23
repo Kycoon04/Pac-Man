@@ -54,41 +54,39 @@ public class Algoritmos {
     }
 
     public List<Posicion> DijkstraLarga(String[][] matriz, Posicion inicio, Posicion objetivo) {
-        int filas = matriz.length;
+int filas = matriz.length;
         int columnas = matriz[0].length;
         String ObstaculoCaja = "#";
         int[] FilasAlrededor = {-1, 0, 1, 0};
-        int[] ColumbasAlrededor = {0, 1, 0, -1};
-        Queue<Posicion> cola = new LinkedList<>();
-        boolean[][] visitado = new boolean[filas][columnas];
+        int[] ColumnasAlrededor = {0, 1, 0, -1};
+
+        int[][] distancias = new int[filas][columnas];
+        for (int[] row : distancias) {
+            Arrays.fill(row, Integer.MIN_VALUE);
+        }
+        distancias[inicio.fila][inicio.columna] = 0;
+
         Posicion[][] PosicionesAnteriores = new Posicion[filas][columnas];
+        PriorityQueue<Posicion> colaPrioridad = new PriorityQueue<>(Comparator.comparingInt(p -> -p.distancia));
+        colaPrioridad.offer(new Posicion(inicio.fila, inicio.columna, 0));
 
-        cola.offer(inicio);
-        visitado[inicio.fila][inicio.columna] = true;
-        Posicion objetivoMasLejano = inicio; // Inicialmente, el objetivo más lejano es el inicio.
-
-        while (!cola.isEmpty()) {
-            Posicion actual = cola.poll();
+        while (!colaPrioridad.isEmpty()) {
+            Posicion actual = colaPrioridad.poll();
 
             for (int j = 0; j < 4; j++) {
                 int nuevaFila = actual.fila + FilasAlrededor[j];
-                int nuevaColumna = actual.columna + ColumbasAlrededor[j];
+                int nuevaColumna = actual.columna + ColumnasAlrededor[j];
                 if (esPosicionValida(nuevaFila, nuevaColumna, filas, columnas)
                         && !matriz[nuevaFila][nuevaColumna].equals(ObstaculoCaja)
-                        && !visitado[nuevaFila][nuevaColumna]) {
-                    cola.offer(new Posicion(nuevaFila, nuevaColumna, 0));
-                    visitado[nuevaFila][nuevaColumna] = true;
+                        && distancias[nuevaFila][nuevaColumna] < actual.distancia - 1) {
+                    colaPrioridad.offer(new Posicion(nuevaFila, nuevaColumna, actual.distancia - 1));
+                    distancias[nuevaFila][nuevaColumna] = actual.distancia - 1;
                     PosicionesAnteriores[nuevaFila][nuevaColumna] = actual;
-                    objetivoMasLejano = new Posicion(nuevaFila, nuevaColumna, 0);
                 }
             }
         }
 
-        if (objetivoMasLejano.fila == inicio.fila && objetivoMasLejano.columna == inicio.columna) {
-            return new ArrayList<>();
-        }
-
-        return construirRuta(PosicionesAnteriores, inicio, objetivoMasLejano);
+        return construirRuta(PosicionesAnteriores, inicio, objetivo);
     }
 
     private List<Posicion> construirRuta(Posicion[][] PosicionRealizada, Posicion inicio, Posicion objetivo) {
