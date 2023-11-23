@@ -200,6 +200,7 @@ public class MainViewController extends Controller implements Initializable {
         FlowController.setLostLive(Integer.parseUnsignedInt(player.getLivesLose()));
         FlowController.setContadorFastantas(Integer.parseUnsignedInt(player.getGhosteat()));
         FlowController.setTimeTotal(player.getTimeallgame());
+        FlowController.setPuntosXpartidaMax(Integer.parseUnsignedInt(player.getPoint1Live()));
         nivelActual();
     }
 

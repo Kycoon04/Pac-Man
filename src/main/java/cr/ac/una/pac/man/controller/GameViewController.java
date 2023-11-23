@@ -115,6 +115,7 @@ public class GameViewController implements Initializable {
     private KeyEvent eventAux = null;
     private double velocidadPacMan = 0.2;
     private int coints = 10;
+    private int puntos=0;
     Text tiempoText = new Text("Tiempo: 00:00");
     @FXML
     private Button btnComprar;
@@ -570,6 +571,7 @@ public class GameViewController implements Initializable {
 
         if (MatrizNumber[PJ_Fila + desplazamientoFila][PJ_Columna + desplazamientoColumna].equals("2")) {
             FlowController.getInstance().setPuntos(FlowController.getInstance().getPuntos() + coints);
+            puntos += coints;
             TextPoints.setText("" + FlowController.getInstance().getPuntos());
             if (FlowController.getInstance().getPuntos() > 900) {
                 velocidadBlinky = 0.20;
@@ -715,10 +717,15 @@ public class GameViewController implements Initializable {
         if (!Continue()) {
             FlowController.setWin(true);
             FlowController.setPuntosWin(FlowController.getNivel() * 100);
-            FlowController.setNivel(FlowController.getNivel() + 1);
+            puntos +=FlowController.getNivel() * 100;
             FlowController.setPuntos(FlowController.getPuntos() + (FlowController.getNivel() * 100));
-            if (FlowController.getNivel() + 1 == 2) {
+            FlowController.setPuntosXpartidaMax(puntos);
+            if (FlowController.getNivel() + 1 == 10) {
                 FlowController.setClasico(true);
+                FlowController.setNivel(10);
+            }else{
+                System.out.println(FlowController.getNivel());
+            FlowController.setNivel(FlowController.getNivel() + 1);
             }
             FlowController.setNivelTotal(FlowController.getNivel() + 1);
             FlowController.setBestTime(Integer.parseUnsignedInt(tiempoText.getText()));
@@ -736,11 +743,13 @@ public class GameViewController implements Initializable {
     public void seguidos() {
         if (!consecutivo) {
             FlowController.setPuntos(FlowController.getPuntos() + 300);
+            puntos += 300;
             TextPoints.setText("" + FlowController.getInstance().getPuntos());
             consecutivo = true;
         } else {
             btnPower.setDisable(false);
             FlowController.setPuntos(FlowController.getPuntos() + 400);
+            puntos += 400;
             TextPoints.setText("" + FlowController.getInstance().getPuntos());
         }
     }
@@ -1285,6 +1294,7 @@ public class GameViewController implements Initializable {
     private void Comprar(ActionEvent event) {
 
         FlowController.getInstance().setPuntos(FlowController.getInstance().getPuntos() - 1500);
+        puntos -=1500;
         TextPoints.setText("" + FlowController.getInstance().getPuntos());
         FlowController.setAuxExperto(false);
         if (FlowController.getInstance().getPuntos() > 1500) {

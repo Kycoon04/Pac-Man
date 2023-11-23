@@ -50,11 +50,20 @@ public class FlowController {
     static int LostLive;
     static int nivelTotal=1;
     static int BestTime=0;
+    static int puntosXpartidaMax=0;
     private FlowController() {
     }
 
     public User getUsuario() {
         return usuario;
+    }
+
+    public static int getPuntosXpartidaMax() {
+        return puntosXpartidaMax;
+    }
+
+    public static void setPuntosXpartidaMax(int puntosXpartidaMax) {
+        FlowController.puntosXpartidaMax = puntosXpartidaMax;
     }
 
     public static int getBestTime() {
